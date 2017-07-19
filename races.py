@@ -2,7 +2,7 @@
 
 import random
 
-RACES = {"Dwarf": "1"}
+RACES = {"1": "Dwarf"}
 
 
 class Dwarf(object):

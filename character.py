@@ -145,19 +145,6 @@ class NPC(object):
         self.skills = skills
 
 
-def create_character():
-    """Interactively request all the necessary fields to create an NPC"""
-    name = input("Name? ")
-    class_choice = input("Class? ")
-    race_choice = input("Race? ")
-    if npc.race_stats.has_subrace:
-        subrace_choice = input("Choose 'Hill' or 'Mountain' subrace: ")
-        npc.race_stats.subrace(subrace_choice)
-    npc = NPC(name, class_choise, race_choice)
-    npc.assign_ability_scores()
-    return npc
-
-
 def print_character(npc):
     """Print the npc"""
     print(npc.name)
@@ -178,3 +165,39 @@ def print_character(npc):
     print(npc.skill_proficiencies)
     for skill in ALL_SKILLS:
         print(skill + ": " + str(npc.skills[skill]))
+
+
+def create_character():
+    """Interactively request all the necessary fields to create an NPC"""
+    name = input("Name? ")
+    good_class = False
+    class_choices = list(range(1, len(classes.CLASSES)+1))
+    class_choices = [str(x) for x in class_choices]
+    while good_class is False:
+        print("Choose a class: ")
+        for item in classes.CLASSES:
+            print(item + ": " + classes.CLASSES[item])
+        class_choice = input("Enter the number for your choice: ")
+        if class_choice in class_choices:
+            class_choice = classes.CLASSES[class_choice]
+            good_class = True
+        else:
+            print("Not a valid class choice")
+    good_race = False
+    race_choices = list(range(1, len(races.RACES)+1))
+    race_choices = [str(x) for x in race_choices]
+    while good_race is False:
+        print("Choose a race: ")
+        for item in races.RACES:
+            print(item + ": " + races.RACES[item])
+        race_choice = input("Enter the number for your choice: ")
+        if race_choice in race_choices:
+            race_choice = races.RACES[race_choice]
+            good_race = True
+        else:
+            print("Not a valid race choice")
+    npc = NPC(name, class_choice, race_choice)
+    print_character(npc)
+
+if __name__ == "__main__":
+    create_character()
