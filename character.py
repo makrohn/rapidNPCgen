@@ -64,6 +64,13 @@ class NPC(object):
         for power in self.char_class["Powers"]:
             if power["Level"] <= self.level:
                 powers.append(power)
+        for power in powers:
+            for compare in powers:
+                if power["Name"] == compare["Name"]:
+                    if power["Level"] < compare["Level"]:
+                        powers.remove(power)
+                    elif compare["Level"] > power["Level"]:
+                        powers.remove(compare)
         return powers
 
     def get_proficiency_bonus(self):
@@ -110,11 +117,11 @@ class NPC(object):
         ability_ups = math.floor(level/4)
         ability_ups = ability_ups*2
         while ability_ups > 0:
-            if ability_scores[self.class_stats.primary] < 20:
-                ability_scores[self.class_stats.primary] += 1
+            if ability_scores[self.char_class["Primary"]] < 20:
+                ability_scores[self.char_class["Primary"]] += 1
                 ability_ups -= 1
-            elif ability_scores[self.class_stats.secondary] < 20:
-                ability_scores[self.class_stats.secondary] += 1
+            elif ability_scores[self.char_class["Secondary"]] < 20:
+                ability_scores[self.char_class["Secondary"]] += 1
                 ability_ups -= 1
             else:
                 abilities = [ability for ability in self.ability_scores]
