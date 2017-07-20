@@ -83,6 +83,7 @@ MARTIAL_RANGED = [
 RANGED_WEAPONS = SIMPLE_RANGED + MARTIAL_RANGED
 MELEE_WEAPONS = SIMPLE_MELEE + MARTIAL_MELEE
 
+
 def choose_melee(proficiencies):
     """Choose a melee weapon"""
     choices = []
@@ -93,11 +94,8 @@ def choose_melee(proficiencies):
         choices += MARTIAL_MELEE
     for proficiency in pros_to_process:
         for item in MELEE_WEAPONS:
-            try:
-                if item[proficiency]:
-                    choices.append(item)
-            except:
-                pass
+            if proficiency in item:
+                choices.append(item)
     if choices == []:
         choices = "No melee weapon"
     return random.choice(choices)
@@ -113,11 +111,8 @@ def choose_ranged(proficiencies):
         choices += MARTIAL_RANGED
     for proficiency in pros_to_process:
         for item in RANGED_WEAPONS:
-            try:
-                if item[proficiency]:
-                    choices.append(item)
-            except:
-                pass
+            if proficiency in item:
+                choices.append(item)
     if choices == []:
         choices = ["No ranged weapon"]
     return random.choice(choices)
