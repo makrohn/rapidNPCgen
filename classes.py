@@ -3,7 +3,7 @@
 import random
 import math
 
-CLASSES = {"1": "Barbarian", "2": "Bard"}
+CLASSES = ["Barbarian", "Bard"]
 
 
 class Barbarian(object):

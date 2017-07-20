@@ -80,7 +80,6 @@ def spells_known(level, char_class):
     spell_list = []
     while remaining_known > 0:
         new_spell = random.choice(spells_available)
-        print(len(spells_available))
         spell_list.append(new_spell)
         spells_available.remove(new_spell)
         remaining_known -= 1

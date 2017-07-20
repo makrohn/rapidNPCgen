@@ -231,14 +231,23 @@ class NPC(object):
             armor_class += 2
         return armor_class
 
+    def calc_initiative(self):
+        """Figure out a character's intiative"""
+        initiative = self.ability_bonuses['Dexterity']
+        if self.charclass.__name__ == "Bard" and self.level >= 2:
+            initiative += math.floor(self.bonus/2)
+        return initiative
+
 
 def print_character(npc):
     """Print the npc"""
     print(npc.name)
     print(npc.race.__name__)
     print(npc.charclass.__name__)
+    print("Level: " + str(npc.level))
     print("HP: " + str(npc.hitpoints))
     print("AC: " + str(npc.armor_class))
+    print("Initiative: " + str(npc.calc_initiative()))
     for ability in [
             "Strength", "Dexterity", "Constitution",
             "Intelligence", "Wisdom", "Charisma"
@@ -277,10 +286,10 @@ def create_character():
     while good_class is False:
         print("Choose a class: ")
         for item in classes.CLASSES:
-            print(item + ": " + classes.CLASSES[item])
-        class_choice = input("Enter the number for your choice: ")
-        if class_choice in class_choices:
-            class_choice = classes.CLASSES[class_choice]
+            print(str(classes.CLASSES.index(item) + 1) + ": " + item)
+        class_choice = int(input("Enter the number for your choice: "))
+        if class_choice in list(range(0, len(classes.CLASSES))):
+            class_choice = classes.CLASSES[class_choice - 1]
             good_class = True
         else:
             print("Not a valid class choice")
@@ -298,10 +307,10 @@ def create_character():
     while good_race is False:
         print("Choose a race: ")
         for item in races.RACES:
-            print(item + ": " + races.RACES[item])
-        race_choice = input("Enter the number for your choice: ")
-        if race_choice in race_choices:
-            race_choice = races.RACES[race_choice]
+            print(str(races.RACES.index(item) + 1) + ": " + item)
+        race_choice = int(input("Enter the number for your choice: "))
+        if race_choice in list(range(0, len(races.RACES))):
+            race_choice = races.RACES[race_choice - 1]
             good_race = True
         else:
             print("Not a valid race choice")
