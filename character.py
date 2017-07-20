@@ -6,6 +6,8 @@ import random
 import classes
 import races
 import weapons
+import spells
+import armor
 
 ABILITIES = [
     "Strength", "Dexterity", "Constitution",
@@ -28,7 +30,7 @@ class NPC(object):
     def __init__(self, npcname, classname, race, level, subrace=""):
         self.name = npcname
         self.level = level
-        self.bonus = 2
+        self.bonus = self.get_proficiency_bonus()
         self.char_class(classname)
         self.char_race(race)
         if subrace != "":
@@ -44,6 +46,20 @@ class NPC(object):
         self.hitpoints = self.get_hp(
             self.level, self.ability_bonuses['Constitution']
             )
+        if self.class_stats.caster:
+            self.spell_list = spells.spells_known(self.level, classname)
+        self.armor = armor.choose_armor(
+            self.armor_proficiencies, self.level,
+            self.ability_scores['Strength']
+            )
+        self.armor_class = self.calc_ac()
+
+    def get_proficiency_bonus(self):
+        """Get proficiency bonus based on level"""
+        bonus = 2
+        extra_bonus = math.floor((self.level-1)/4)
+        bonus += extra_bonus
+        return bonus
 
     def get_hp(self, level, con_bonus):
         """Figure out character's HP"""
@@ -136,7 +152,7 @@ class NPC(object):
         except:
             self.race_stats.skills = []
         self.skill_proficiencies = (
-            self.race_stats.skills + self.class_stats.get_skills(self.level)
+            self.race_stats.skills + self.class_stats.get_skills()
             )
 
     def calc_skills(self):
@@ -180,6 +196,30 @@ class NPC(object):
             saves[save] = self.ability_bonuses[save] + self.bonus
         self.saves = saves
 
+    def calc_ac(self):
+        if self.charclass.__name__ == "Barbarian":
+            armor_class = (
+                10 + self.ability_bonuses['Dexterity'] +
+                self.ability_bonuses['Constitution']
+                )
+            del self.armor[0]
+        elif self.charclass.__name__ == "Monk":
+            armor_class = (
+                10 + self.ability_bonuses['Dexterity'] +
+                self.ability_bonuses['Wisdom']
+                )
+            del self.armor[0]
+        else:
+            armor_class = self.armor[0]["AC"]
+            if self.ability_bonuses['Dexterity'] > self.armor[0]["Dex_max"]:
+                ac_bonus = self.armor[0]["Dex_max"]
+            else:
+                ac_bonus = self.ability_bonuses['Dexterity']
+            armor_class += ac_bonus
+        if len(self.armor) > 1:
+            armor_class += 2
+        return armor_class
+
 
 def print_character(npc):
     """Print the npc"""
@@ -187,6 +227,7 @@ def print_character(npc):
     print(npc.race.__name__)
     print(npc.charclass.__name__)
     print("HP: " + str(npc.hitpoints))
+    print("AC: " + str(npc.armor_class))
     for ability in [
             "Strength", "Dexterity", "Constitution",
             "Intelligence", "Wisdom", "Charisma"
@@ -209,8 +250,11 @@ def print_character(npc):
         print(skill + ": " + str(npc.skills[skill]))
     print(npc.melee)
     print(npc.ranged)
+    print(npc.armor)
     for power in npc.powers:
         print(power["Name"] + ": " + power["Text"])
+    if npc.class_stats.caster:
+        print(npc.spell_list)
 
 
 def create_character():
