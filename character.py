@@ -35,6 +35,7 @@ class NPC(object):
         self.char_race(race)
         if subrace != "":
             self.race_stats.subrace(subrace)
+        self.subrace = subrace
         self.assign_ability_scores(level)
         self.calculate_proficiencies()
         self.calc_skills()
@@ -65,6 +66,8 @@ class NPC(object):
         """Figure out character's HP"""
         hitpoints = self.class_stats.hit_dice
         hitpoints += con_bonus * level
+        if self.subrace == "Hill":
+            hitpoints += level
         level = level-1
         hitpoints += level * 7
         return hitpoints
@@ -158,17 +161,22 @@ class NPC(object):
     def calc_skills(self):
         """Assign values to skill bonuses"""
         skills = {}
+
+        joat_bonus = 0
+        if self.charclass.__name__ == "Bard" and self.level >= 2:
+            joat_bonus = math.floor(self.bonus/2)
+
         for skill in STR_SKILLS:
             if skill in self.skill_proficiencies:
                 skills[skill] = self.ability_bonuses['Strength'] + self.bonus
             else:
-                skills[skill] = self.ability_bonuses['Strength']
+                skills[skill] = self.ability_bonuses['Strength'] + joat_bonus
 
         for skill in DEX_SKILLS:
             if skill in self.skill_proficiencies:
                 skills[skill] = self.ability_bonuses['Dexterity'] + self.bonus
             else:
-                skills[skill] = self.ability_bonuses['Dexterity']
+                skills[skill] = self.ability_bonuses['Dexterity'] + joat_bonus
 
         for skill in INT_SKILLS:
             if skill in self.skill_proficiencies:
@@ -176,19 +184,21 @@ class NPC(object):
                     self.ability_bonuses['Intelligence'] + self.bonus
                     )
             else:
-                skills[skill] = self.ability_bonuses['Intelligence']
+                skills[skill] = (
+                    self.ability_bonuses['Intelligence'] + joat_bonus
+                    )
 
         for skill in WIS_SKILLS:
             if skill in self.skill_proficiencies:
                 skills[skill] = self.ability_bonuses['Wisdom'] + self.bonus
             else:
-                skills[skill] = self.ability_bonuses['Wisdom']
+                skills[skill] = self.ability_bonuses['Wisdom'] + joat_bonus
 
         for skill in CHA_SKILLS:
             if skill in self.skill_proficiencies:
                 skills[skill] = self.ability_bonuses['Charisma'] + self.bonus
             else:
-                skills[skill] = self.ability_bonuses['Charisma']
+                skills[skill] = self.ability_bonuses['Charisma'] + joat_bonus
         self.skills = skills
 
         saves = {}
@@ -197,6 +207,7 @@ class NPC(object):
         self.saves = saves
 
     def calc_ac(self):
+        """Figure out a character's AC"""
         if self.charclass.__name__ == "Barbarian":
             armor_class = (
                 10 + self.ability_bonuses['Dexterity'] +

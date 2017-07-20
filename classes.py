@@ -145,13 +145,6 @@ class Bard(object):
                 "Level": 1,
             },
             {
-                "Name": "Jack of All Trades",
-                "Text": "You can add half your proficiency bonus, rounded "
-                        "down, to any ability check you make that doesn’t "
-                        "already include your proficiency bonus.",
-                "Level": 2,
-            },
-            {
                 "Name": "Song of Rest",
                 "Text": "you can use soothing music or oration to help "
                         "revitalize your wounded allies during a short rest. "

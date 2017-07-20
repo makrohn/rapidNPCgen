@@ -46,13 +46,8 @@ class Dwarf(object):
         """Add subrace attributes"""
         if "Hill" in subrace_choice:
             self.abilities["Wisdom"] = 1
-            self.powers.append({
-                "Name": "Dwarven Toughness",
-                "Text": "Your hit point maximum increases by 1, and "
-                               "it increases by 1 every time you gain a level."
-                })
         elif "Mountain" in subrace_choice:
             self.abilities["Strength"] = 2
-            self.armor_proficiencies = ["Light", "Medium",]
+            self.armor_proficiencies = ["Light", "Medium"]
         else:
             return "Invalid subrace choice"

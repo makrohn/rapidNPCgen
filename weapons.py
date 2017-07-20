@@ -83,6 +83,7 @@ MARTIAL_RANGED = [
 RANGED_WEAPONS = SIMPLE_RANGED + MARTIAL_RANGED
 MELEE_WEAPONS = SIMPLE_MELEE + MARTIAL_MELEE
 
+
 def choose_melee(proficiencies):
     """Choose a melee weapon"""
     choices = []
