@@ -27,6 +27,7 @@ class Dwarf(object):
             "Mason's Tools",
             ])]
         self.languages = ["Dwarvish", "Common"]
+        self.armor_proficiencies = []
         self.powers = [
             {
                 "Name": "Dwarven Resilience",
@@ -55,6 +56,7 @@ class Dwarf(object):
         else:
             return "Invalid subrace choice"
 
+
 class Elf(object):
     """Elf Class definition"""
     def __init__(self):
@@ -65,6 +67,7 @@ class Elf(object):
         self.skills = ["Perception"]
         self.languages = ["Elvish", "Common"]
         self.tool_proficiencies = []
+        self.weapon_proficiencies = []
         self.powers = [
             {
                 "Name": "Fey Ancestry",
@@ -85,7 +88,7 @@ class Elf(object):
         if "High" in subrace_choice:
             self.abilities["Intelligence"] = 1
             self.weapon_proficiencies = ["Longsword", "Shortsword",
-                "Shortbow", "Longbow"]
+                                         "Shortbow", "Longbow"]
             self.powers.append({
                 "Name": "Extra cantrip",
                 "Text": "You know one extra cantrip of your choice from the "
@@ -96,7 +99,7 @@ class Elf(object):
         elif "Wood" in subrace_choice:
             self.abilities["Wisdom"] = 1
             self.weapon_proficiencies = ["Longsword", "Shortsword",
-                "Shortbow", "Longbow"]
+                                         "Shortbow", "Longbow"]
             self.powers.append({
                 "Name": "Mask of the Wild",
                 "Text": "You can attempt to hide even when you are only "
@@ -122,9 +125,10 @@ class Elf(object):
                         "spellcasting ability for these spells."
                 })
             self.weapon_proficiencies = ["Rapier", "Shortsword",
-                "Crossbow, hand"]
+                                         "Crossbow, hand"]
         else:
             return "Invalid subrace choice"
+
 
 class Halfling(object):
     """Halfling Class definition"""
@@ -177,6 +181,7 @@ class Halfling(object):
         else:
             return "Invalid subrace choice"
 
+
 class Human(object):
     """Human Class definition"""
     def __init__(self):
@@ -192,6 +197,7 @@ class Human(object):
         self.languages = ["One more", "Common"]
         self.powers = []
         self.has_subrace = False
+
 
 class Dragonborn(object):
     """Dragonborn Class definition"""
@@ -231,6 +237,7 @@ class Dragonborn(object):
             },
             ]
         self.has_subrace = False
+
 
 class Gnome(object):
     """Gnome Class definition"""
@@ -297,6 +304,7 @@ class Gnome(object):
         else:
             return "Invalid subrace choice"
 
+
 class HalfElf(object):
     """Half-Elf Class definition"""
     def __init__(self):
@@ -323,7 +331,9 @@ class HalfElf(object):
         self.skills = self.get_skills()
 
     def two_random_abilities(self):
-        options = ["Strength", "Dexterity", "Intelligence", "Constitution", "Wisdom"]
+        """Pick two ability bonuses for the Half-Elf"""
+        options = ["Strength", "Dexterity", "Intelligence", "Constitution",
+                   "Wisdom"]
         stat_one = random.choice(options)
         options.remove(stat_one)
         stat_two = random.choice(options)
@@ -344,6 +354,7 @@ class HalfElf(object):
         second_skill = random.choice(skills_list)
         skills = [first_skill, second_skill]
         return skills
+
 
 class HalfOrc(object):
     """Half-Orc Class definition"""
@@ -373,6 +384,7 @@ class HalfOrc(object):
             }
             ]
         self.has_subrace = False
+
 
 class Tiefling(object):
     """Tiefling Class definition"""
