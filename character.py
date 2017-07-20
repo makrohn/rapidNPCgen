@@ -27,7 +27,7 @@ ALL_SKILLS = sorted(ALL_SKILLS)
 def load_race(racename, subrace=""):
     if subrace != "":
         races.get_subrace(racename, subrace)
-    race = races.RACE_DEFINITIONS[racename]
+    race = races.RACES[racename]
     return race
 
 class NPC(object):
@@ -300,19 +300,19 @@ def create_character():
         else:
             print("Please choose a level from 1 to 20")
     good_race = False
-    race_choices = list(range(1, len(races.RACES)+1))
+    race_choices = list(range(1, len(races.RACE_LIST)+1))
     race_choices = [str(x) for x in race_choices]
     while good_race is False:
         print("Choose a race: ")
-        for item in races.RACES:
-            print(str(races.RACES.index(item) + 1) + ": " + item)
+        for item in races.RACE_LIST:
+            print(str(races.RACE_LIST.index(item) + 1) + ": " + item)
         race_choice = int(input("Enter the number for your choice: "))
-        if race_choice in list(range(1, len(races.RACES) + 1)):
-            race_choice = races.RACES[race_choice - 1]
+        if race_choice in list(range(1, len(races.RACE_LIST) + 1)):
+            race_choice = races.RACE_LIST[race_choice - 1]
             good_race = True
         else:
             print("Not a valid race choice")
-    race = races.RACE_DEFINITIONS[race_choice]
+    race = races.RACES[race_choice]
     if "Subraces" in race:
         good_subrace = False
         subrace_choices = list(range(0, len(race["Subraces"])))
