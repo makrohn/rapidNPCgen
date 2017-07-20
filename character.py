@@ -288,7 +288,7 @@ def create_character():
         for item in classes.CLASSES:
             print(str(classes.CLASSES.index(item) + 1) + ": " + item)
         class_choice = int(input("Enter the number for your choice: "))
-        if class_choice in list(range(0, len(classes.CLASSES))):
+        if class_choice in list(range(1, len(classes.CLASSES) + 1)):
             class_choice = classes.CLASSES[class_choice - 1]
             good_class = True
         else:
@@ -309,7 +309,7 @@ def create_character():
         for item in races.RACES:
             print(str(races.RACES.index(item) + 1) + ": " + item)
         race_choice = int(input("Enter the number for your choice: "))
-        if race_choice in list(range(0, len(races.RACES))):
+        if race_choice in list(range(1, len(races.RACES) + 1)):
             race_choice = races.RACES[race_choice - 1]
             good_race = True
         else:
