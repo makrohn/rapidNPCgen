@@ -24,11 +24,14 @@ CHA_SKILLS = ["Deception", "Intimidation", "Performance", "Persuasion"]
 ALL_SKILLS = STR_SKILLS + DEX_SKILLS + INT_SKILLS + WIS_SKILLS + CHA_SKILLS
 ALL_SKILLS = sorted(ALL_SKILLS)
 
+
 def load_race(racename, subrace=""):
+    """Load an NPC's race definition"""
     if subrace != "":
         races.get_subrace(racename, subrace)
     race = races.RACES[racename]
     return race
+
 
 class NPC(object):
     """Object to define the stat block of the NPC itself"""
@@ -60,6 +63,7 @@ class NPC(object):
         self.armor_class = self.calc_ac()
 
     def get_powers(self):
+        """Calculate powers for the NPC"""
         powers = []
         for power in self.char_class["Powers"]:
             if power["Level"] <= self.level:
@@ -89,12 +93,6 @@ class NPC(object):
         level = level-1
         hitpoints += level * 7
         return hitpoints
-
-    def char_class(self, classname):
-        """Load stats for the class"""
-        self.charclass = getattr(classes, classname)
-        self.class_stats = self.charclass()
-        self.class_name = classname
 
     def assign_ability_scores(self, level):
         """Assign ability scores according to standard matrix"""
@@ -138,10 +136,6 @@ class NPC(object):
 
     def calculate_proficiencies(self):
         """Combine racial and class proficiencies"""
-        try:
-            self.race["Weapon Proficiencies"]
-        except:
-            self.race["Weapon Proficiencies"] = []
         self.weapon_proficiencies = (
             self.race["Weapon Proficiencies"] +
             self.char_class["Weapon Proficiencies"]
@@ -166,6 +160,7 @@ class NPC(object):
             )
 
     def find_skills(self):
+        """Get Race skills, then find remaining Class skills"""
         if "Skills" in self.race:
             skills = self.race["Skills"]
         else:
@@ -250,8 +245,9 @@ class NPC(object):
             else:
                 ac_bonus = self.ability_bonuses['Dexterity']
             armor_class += ac_bonus
-        if len(self.armor) > 1:
-            armor_class += 2
+        for item in self.armor:
+            if item["Name"] == "Shield":
+                armor_class += 2
         return armor_class
 
     def calc_initiative(self):
@@ -271,10 +267,8 @@ def print_character(npc):
     print("HP: " + str(npc.hitpoints))
     print("AC: " + str(npc.armor_class))
     print("Initiative: " + str(npc.calc_initiative()))
-    for ability in [
-            "Strength", "Dexterity", "Constitution",
-            "Intelligence", "Wisdom", "Charisma"
-        ]:
+    for ability in ["Strength", "Dexterity", "Constitution",
+                    "Intelligence", "Wisdom", "Charisma"]:
         print(
             ability + ": " + str(npc.ability_scores[ability]) + " (" +
             str(npc.ability_bonuses[ability]) + ")"
@@ -319,7 +313,7 @@ def create_character():
     good_level = False
     while good_level is False:
         level = int(input("Level? "))
-        if (0 < round(level) <= 20):
+        if 0 < round(level) <= 20:
             level_choice = level
             good_level = True
         else:

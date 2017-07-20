@@ -60,7 +60,6 @@ def choose_armor(proficiencies, level, strength):
         if remaining_potency != 0:
             armor_choice["AC"] += remaining_potency
             armor_choice["Name"] += " +" + str(remaining_potency)
-    if "Shield" in proficiencies:
+    if "Shields" in proficiencies:
         return ([armor_choice, SHIELD[0]])
-    else:
-        return [armor_choice]
+    return [armor_choice]

@@ -1,9 +1,9 @@
 """Module to hold 5e Class definitions"""
 
 import random
-import math
 
 CLASS_LIST = ["Barbarian", "Bard"]
+
 
 def get_instruments():
     """Figure out the Bard's instruments"""
@@ -69,14 +69,14 @@ BARBARIAN = {
     ],
 }
 
-BARD =  {
+BARD = {
     "Name": "Bard",
     "Primary": "Charisma",
     "Secondary": "Dexterity",
     "Armor Proficiencies": ["Light"],
     "Weapon Proficiencies": [
-            "Simple", "Crossbow, hand", "Longsword", "Rapier", "Shortsword"
-            ],
+        "Simple", "Crossbow, hand", "Longsword", "Rapier", "Shortsword"
+        ],
     "Tool Proficiencies": get_instruments(),
     "Saves": ["Charisma", "Dexterity"],
     "Hit Dice": 8,
