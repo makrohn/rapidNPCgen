@@ -36,6 +36,7 @@ class NPC(object):
         self.assign_ability_scores()
         self.calculate_proficiencies()
         self.calc_skills()
+        self.melee = weapons.choose_melee(self.weapon_proficiencies)
 
     def char_class(self, classname):
         """Load stats for the class"""
