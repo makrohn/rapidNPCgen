@@ -24,6 +24,11 @@ CHA_SKILLS = ["Deception", "Intimidation", "Performance", "Persuasion"]
 ALL_SKILLS = STR_SKILLS + DEX_SKILLS + INT_SKILLS + WIS_SKILLS + CHA_SKILLS
 ALL_SKILLS = sorted(ALL_SKILLS)
 
+def load_race(racename, subrace=""):
+    if subrace != "":
+        races.get_subrace(racename, subrace)
+    race = races.RACE_DEFINITIONS[racename]
+    return race
 
 class NPC(object):
     """Object to define the stat block of the NPC itself"""
@@ -32,17 +37,15 @@ class NPC(object):
         self.level = level
         self.bonus = self.get_proficiency_bonus()
         self.char_class(classname)
-        self.char_race(race)
-        if subrace != "":
-            self.race_stats.subrace(subrace)
+        self.race = load_race(race, subrace)
         self.subrace = subrace
-        self.assign_ability_scores(level)
+        self.ability_scores = self.assign_ability_scores(level)
         self.calculate_proficiencies()
         self.calc_skills()
         self.melee = weapons.choose_melee(self.weapon_proficiencies)
         self.ranged = weapons.choose_ranged(self.weapon_proficiencies)
         self.powers = (
-            self.race_stats.powers + self.class_stats.find_powers(self.level)
+            self.race["Powers"] + self.class_stats.find_powers(self.level)
             )
         self.hitpoints = self.get_hp(
             self.level, self.ability_bonuses['Constitution']
@@ -78,68 +81,63 @@ class NPC(object):
         self.class_stats = self.charclass()
         self.class_name = classname
 
-    def char_race(self, race):
-        """Load stats for the race"""
-        self.race = getattr(races, race)
-        self.race_stats = self.race()
-        self.race_name = race
-
     def assign_ability_scores(self, level):
         """Assign ability scores according to standard matrix"""
-        self.ability_scores = {}
+        ability_scores = {}
         scores_left = [15, 14, 13, 12, 10, 8]
         abilities_left = ABILITIES
-        self.ability_scores[self.class_stats.primary] = scores_left[0]
+        ability_scores[self.class_stats.primary] = scores_left[0]
         del scores_left[0]
         abilities_left.remove(self.class_stats.primary)
-        self.ability_scores[self.class_stats.secondary] = scores_left[0]
+        ability_scores[self.class_stats.secondary] = scores_left[0]
         del scores_left[0]
         abilities_left.remove(self.class_stats.secondary)
         while len(abilities_left) > 0:
             next_ability = random.choice(abilities_left)
-            self.ability_scores[next_ability] = scores_left[0]
+            ability_scores[next_ability] = scores_left[0]
             del scores_left[0]
             abilities_left.remove(next_ability)
-        for ability in self.race_stats.abilities:
-            self.ability_scores[ability] += self.race_stats.abilities[ability]
+        for ability in self.race["Abilities"]:
+            ability_scores[ability] += self.race["Abilities"][ability]
         ability_ups = math.floor(level/4)
         ability_ups = ability_ups*2
         while ability_ups > 0:
-            if self.ability_scores[self.class_stats.primary] < 20:
-                self.ability_scores[self.class_stats.primary] += 1
+            if ability_scores[self.class_stats.primary] < 20:
+                ability_scores[self.class_stats.primary] += 1
                 ability_ups -= 1
-            elif self.ability_scores[self.class_stats.secondary] < 20:
-                self.ability_scores[self.class_stats.secondary] += 1
+            elif ability_scores[self.class_stats.secondary] < 20:
+                ability_scores[self.class_stats.secondary] += 1
                 ability_ups -= 1
             else:
                 abilities = [ability for ability in self.ability_scores]
                 stat_up = random.choice(abilities)
-                if self.ability_scores[stat_up] < 20:
-                    self.ability_scores[stat_up] += 1
+                if ability_scores[stat_up] < 20:
+                    ability_scores[stat_up] += 1
                     ability_ups -= 1
         self.ability_bonuses = {}
-        for score in self.ability_scores:
+        for score in ability_scores:
             self.ability_bonuses[score] = math.floor(
-                (self.ability_scores[score] - 10)/2
+                (ability_scores[score] - 10)/2
                 )
+        return ability_scores
 
     def calculate_proficiencies(self):
         """Combine racial and class proficiencies"""
         try:
-            self.race_stats.weapon_proficiencies
+            self.race["Weapon Proficiencies"]
         except:
-            self.race_stats.weapon_proficiencies = []
+            self.race["Weapon Proficiencies"] = []
         self.weapon_proficiencies = (
-            self.race_stats.weapon_proficiencies +
+            self.race["Weapon Proficiencies"] +
             self.class_stats.weapon_proficiencies
             )
 
         try:
-            self.race_stats.armor_proficiencies
+            self.race["Armor Proficiencies"]
         except:
-            self.race_stats.armor_proficiencies = []
+            self.race["Armor Proficiencies"] = []
         self.armor_proficiencies = (
-            self.race_stats.armor_proficiencies +
+            self.race["Armor Proficiencies"] +
             self.class_stats.armor_proficiencies)
 
         try:
@@ -147,15 +145,15 @@ class NPC(object):
         except:
             self.class_stats.tool_proficiencies = []
         self.tool_proficiencies = (
-            self.race_stats.tool_proficiencies +
+            self.race["Tool Proficiencies"] +
             self.class_stats.tool_proficiencies)
 
         try:
-            self.race_stats.skills
+            self.race["Skills"]
         except:
-            self.race_stats.skills = []
+            self.race["Skills"] = []
         self.skill_proficiencies = (
-            self.race_stats.skills + self.class_stats.get_skills()
+            self.race["Skills"] + self.class_stats.get_skills()
             )
 
     def calc_skills(self):
@@ -242,7 +240,7 @@ class NPC(object):
 def print_character(npc):
     """Print the npc"""
     print(npc.name)
-    print(npc.race.__name__)
+    print(npc.race["Name"])
     print(npc.charclass.__name__)
     print("Level: " + str(npc.level))
     print("HP: " + str(npc.hitpoints))
@@ -257,15 +255,15 @@ def print_character(npc):
             str(npc.ability_bonuses[ability]) + ")"
             )
     print("Saves: " + str(npc.saves))
-    print("Size: " + npc.race_stats.size)
-    print("Speed: " + str(npc.race_stats.speed))
-    print("Darkvision: " + str(npc.race_stats.darkvision))
+    print("Size: " + npc.race["Size"])
+    print("Speed: " + str(npc.race["Speed"]))
+    print("Darkvision: " + str(npc.race["Darkvision"]))
     print("Proficiencies")
     print(npc.weapon_proficiencies)
     print(npc.armor_proficiencies)
     print(npc.tool_proficiencies)
     print(npc.skill_proficiencies)
-    print(npc.race_stats.languages)
+    print(npc.race["Languages"])
     for skill in ALL_SKILLS:
         print(skill + ": " + str(npc.skills[skill]))
     print(npc.melee)
@@ -314,23 +312,22 @@ def create_character():
             good_race = True
         else:
             print("Not a valid race choice")
-    race = getattr(races, race_choice)
-    race_subrace = race()
-    if race_subrace.has_subrace is True:
+    race = races.RACE_DEFINITIONS[race_choice]
+    if "Subraces" in race:
         good_subrace = False
-        subrace_choices = list(range(0, len(race_subrace.subrace_choices)))
+        subrace_choices = list(range(0, len(race["Subraces"])))
         while good_subrace is False:
             print("Choose a subrace: ")
-            for item in race_subrace.subrace_choices:
+            for item in race["Subraces"]:
                 print(
-                    str(race_subrace.subrace_choices.index(item)+1) +
+                    str(race["Subraces"].index(item)+1) +
                     ": " + item
                     )
             subrace_choice = int(
                 input("Enter the number for your choice: ")
                 ) - 1
             if subrace_choice in subrace_choices:
-                subrace_choice = race_subrace.subrace_choices[subrace_choice]
+                subrace_choice = race["Subraces"][subrace_choice]
                 npc = NPC(
                     name, class_choice, race_choice,
                     level_choice, subrace_choice
