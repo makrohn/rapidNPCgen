@@ -25,9 +25,9 @@ ALL_SKILLS = sorted(ALL_SKILLS)
 
 class NPC(object):
     """Object to define the stat block of the NPC itself"""
-    def __init__(self, npcname, classname, race, subrace=""):
+    def __init__(self, npcname, classname, race, level, subrace=""):
         self.name = npcname
-        self.level = 1
+        self.level = level
         self.bonus = 2
         self.char_class(classname)
         self.char_race(race)
@@ -38,7 +38,20 @@ class NPC(object):
         self.calc_skills()
         self.melee = weapons.choose_melee(self.weapon_proficiencies)
         self.ranged = weapons.choose_ranged(self.weapon_proficiencies)
-        self.powers = self.race_stats.powers + self.class_stats.powers
+        self.powers = (
+            self.race_stats.powers + self.class_stats.find_powers(self.level)
+            )
+        self.hitpoints = self.get_hp(
+            self.level, self.ability_bonuses['Constitution']
+            )
+
+    def get_hp(self, level, con_bonus):
+        """Figure out character's HP"""
+        hitpoints = self.class_stats.hit_dice
+        hitpoints += con_bonus * level
+        level = level-1
+        hitpoints += level * 7
+        return hitpoints
 
     def char_class(self, classname):
         """Load stats for the class"""
@@ -108,7 +121,7 @@ class NPC(object):
         except:
             self.race_stats.skills = []
         self.skill_proficiencies = (
-            self.race_stats.skills + self.class_stats.skills
+            self.race_stats.skills + self.class_stats.get_skills(self.level)
             )
 
     def calc_skills(self):
@@ -158,7 +171,7 @@ def print_character(npc):
     print(npc.name)
     print(npc.race.__name__)
     print(npc.charclass.__name__)
-    print("HP: " + str(npc.class_stats.hit_dice))
+    print("HP: " + str(npc.hitpoints))
     for ability in [
             "Strength", "Dexterity", "Constitution",
             "Intelligence", "Wisdom", "Charisma"
@@ -201,6 +214,14 @@ def create_character():
             good_class = True
         else:
             print("Not a valid class choice")
+    good_level = False
+    while good_level is False:
+        level = int(input("Level? "))
+        if (0 < round(level) <= 20):
+            level_choice = level
+            good_level = True
+        else:
+            print("Please choose a level from 1 to 20")
     good_race = False
     race_choices = list(range(1, len(races.RACES)+1))
     race_choices = [str(x) for x in race_choices]
@@ -231,12 +252,15 @@ def create_character():
                 ) - 1
             if subrace_choice in subrace_choices:
                 subrace_choice = race_subrace.subrace_choices[subrace_choice]
-                npc = NPC(name, class_choice, race_choice, subrace_choice)
+                npc = NPC(
+                    name, class_choice, race_choice,
+                    level_choice, subrace_choice
+                    )
                 good_subrace = True
             else:
                 print("Not a valid subrace choice")
     else:
-        npc = NPC(name, class_choice, race_choice)
+        npc = NPC(name, class_choice, race_choice, level_choice)
     print_character(npc)
 
 if __name__ == "__main__":

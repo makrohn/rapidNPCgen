@@ -8,14 +8,16 @@ CLASSES = {"1": "Barbarian"}
 class Barbarian(object):
     """Barbarian Class definition"""
     def __init__(self):
-        self.__name__ = "Barbarian"
         self.primary = "Strength"
         self.secondary = "Constitution"
-        self.hit_dice = 12
         self.armor_proficiencies = ["Light", "Medium", "Shields"]
         self.weapon_proficiencies = ["Simple", "Martial"]
         self.tool_proficiencies = []
         self.saves = ["Strength", "Constitution"]
+        self.hit_dice = 12
+
+    def get_skills(self, level=0):
+        """Figure out what skills a Barbaian has"""
         skills_list = [
             "Animal Handling",
             "Athletics",
@@ -27,8 +29,12 @@ class Barbarian(object):
         first_skill = random.choice(skills_list)
         skills_list.remove(first_skill)
         second_skill = random.choice(skills_list)
-        self.skills = [first_skill, second_skill]
-        self.powers = [
+        skills = [first_skill, second_skill]
+        return skills
+
+    def find_powers(self, level):
+        """Figure out what powers they have for their level"""
+        powers = [
             {
                 "Name": "Rage",
                 "Text": "On your turn, you can enter a rage as a bonus "
@@ -43,3 +49,8 @@ class Barbarian(object):
                 "Level": 1,
             }
             ]
+        acquired = []
+        for power in powers:
+            if power["Level"] <= level:
+                acquired.append(power)
+        return acquired

@@ -8,7 +8,6 @@ RACES = {"1": "Dwarf"}
 class Dwarf(object):
     """Dwarf Class definition"""
     def __init__(self):
-        self.__name__ = "Dwarf"
         self.abilities = {"Constitution": 2}
         self.size = "Medium"
         self.speed = 25
@@ -49,7 +48,7 @@ class Dwarf(object):
             self.abilities["Wisdom"] = 1
             self.powers.append({
                 "Name": "Dwarven Toughness",
-                "Description": "Your hit point maximum increases by 1, and "
+                "Text": "Your hit point maximum increases by 1, and "
                                "it increases by 1 every time you gain a level."
                 })
         elif "Mountain" in subrace_choice:
