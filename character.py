@@ -37,6 +37,8 @@ class NPC(object):
         self.calculate_proficiencies()
         self.calc_skills()
         self.melee = weapons.choose_melee(self.weapon_proficiencies)
+        self.ranged = weapons.choose_ranged(self.weapon_proficiencies)
+        self.powers = self.race_stats.powers + self.class_stats.powers
 
     def char_class(self, classname):
         """Load stats for the class"""
@@ -145,17 +147,27 @@ class NPC(object):
                 skills[skill] = self.ability_bonuses['Charisma']
         self.skills = skills
 
+        saves = {}
+        for save in self.class_stats.saves:
+            saves[save] = self.ability_bonuses[save] + self.bonus
+        self.saves = saves
+
 
 def print_character(npc):
     """Print the npc"""
     print(npc.name)
     print(npc.race.__name__)
     print(npc.charclass.__name__)
+    print("HP: " + str(npc.class_stats.hit_dice))
     for ability in [
             "Strength", "Dexterity", "Constitution",
             "Intelligence", "Wisdom", "Charisma"
         ]:
-        print(ability + ": " + str(npc.ability_scores[ability]))
+        print(
+            ability + ": " + str(npc.ability_scores[ability]) + " (" +
+            str(npc.ability_bonuses[ability]) + ")"
+            )
+    print("Saves: " + str(npc.saves))
     print("Size: " + npc.race_stats.size)
     print("Speed: " + str(npc.race_stats.speed))
     print("Darkvision: " + str(npc.race_stats.darkvision))
@@ -164,8 +176,13 @@ def print_character(npc):
     print(npc.armor_proficiencies)
     print(npc.tool_proficiencies)
     print(npc.skill_proficiencies)
+    print(npc.race_stats.languages)
     for skill in ALL_SKILLS:
         print(skill + ": " + str(npc.skills[skill]))
+    print(npc.melee)
+    print(npc.ranged)
+    for power in npc.powers:
+        print(power["Name"] + ": " + power["Text"])
 
 
 def create_character():

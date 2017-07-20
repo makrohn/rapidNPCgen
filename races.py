@@ -28,18 +28,16 @@ class Dwarf(object):
         self.powers = [
             {
                 "Name": "Dwarven Resilience",
-                "Description": "You have advantage on saving throws against "
-                               "poison, and you have resistance against poison"
-                               " damage"
+                "Text": "You have advantage on saving throws against poison, "
+                        "and you have resistance against poison damage"
             },
             {
                 "Name": "Stonecunning",
-                "Description": "Whenever you make an Intelligence (History) "
-                               "check related to the origin of stonework, you"
-                               " are considered proficient in the History "
-                               "skill and add double your proficiency bonus "
-                               "to the check, instead of your normal "
-                               "proficiency bonus."
+                "Text": "Whenever you make an Intelligence (History) check "
+                        "related to the origin of stonework, you are "
+                        "considered proficient in the History skill and add "
+                        "double your proficiency bonus to the check, instead "
+                        "of your normal proficiency bonus."
             }
             ]
         self.has_subrace = True
