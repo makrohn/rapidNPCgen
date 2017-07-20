@@ -196,7 +196,29 @@ def create_character():
             good_race = True
         else:
             print("Not a valid race choice")
-    npc = NPC(name, class_choice, race_choice)
+    race = getattr(races, race_choice)
+    race_subrace = race()
+    if race_subrace.has_subrace is True:
+        good_subrace = False
+        subrace_choices = list(range(0, len(race_subrace.subrace_choices)))
+        while good_subrace is False:
+            print("Choose a subrace: ")
+            for item in race_subrace.subrace_choices:
+                print(
+                    str(race_subrace.subrace_choices.index(item)+1) +
+                    ": " + item
+                    )
+            subrace_choice = int(
+                input("Enter the number for your choice: ")
+                ) - 1
+            if subrace_choice in subrace_choices:
+                subrace_choice = race_subrace.subrace_choices[subrace_choice]
+                npc = NPC(name, class_choice, race_choice, subrace_choice)
+                good_subrace = True
+            else:
+                print("Not a valid subrace choice")
+    else:
+        npc = NPC(name, class_choice, race_choice)
     print_character(npc)
 
 if __name__ == "__main__":
