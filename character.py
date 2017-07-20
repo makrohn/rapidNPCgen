@@ -33,7 +33,7 @@ class NPC(object):
         self.char_race(race)
         if subrace != "":
             self.race_stats.subrace(subrace)
-        self.assign_ability_scores()
+        self.assign_ability_scores(level)
         self.calculate_proficiencies()
         self.calc_skills()
         self.melee = weapons.choose_melee(self.weapon_proficiencies)
@@ -65,7 +65,7 @@ class NPC(object):
         self.race_stats = self.race()
         self.race_name = race
 
-    def assign_ability_scores(self):
+    def assign_ability_scores(self, level):
         """Assign ability scores according to standard matrix"""
         self.ability_scores = {}
         scores_left = [15, 14, 13, 12, 10, 8]
@@ -83,6 +83,21 @@ class NPC(object):
             abilities_left.remove(next_ability)
         for ability in self.race_stats.abilities:
             self.ability_scores[ability] += self.race_stats.abilities[ability]
+        ability_ups = math.floor(level/4)
+        ability_ups = ability_ups*2
+        while ability_ups > 0:
+            if self.ability_scores[self.class_stats.primary] < 20:
+                self.ability_scores[self.class_stats.primary] += 1
+                ability_ups -= 1
+            elif self.ability_scores[self.class_stats.secondary] < 20:
+                self.ability_scores[self.class_stats.secondary] += 1
+                ability_ups -= 1
+            else:
+                abilities = [ability for ability in self.ability_scores]
+                stat_up = random.choice(abilities)
+                if self.ability_scores[stat_up] < 20:
+                    self.ability_scores[stat_up] += 1
+                    ability_ups -= 1
         self.ability_bonuses = {}
         for score in self.ability_scores:
             self.ability_bonuses[score] = math.floor(
