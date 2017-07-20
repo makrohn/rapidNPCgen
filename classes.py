@@ -17,7 +17,7 @@ class Barbarian(object):
         self.hit_dice = 12
 
     def get_skills(self, level=0):
-        """Figure out what skills a Barbaian has"""
+        """Figure out what skills a Barbarian has"""
         skills_list = [
             "Animal Handling",
             "Athletics",
