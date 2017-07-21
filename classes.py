@@ -28,8 +28,8 @@ def choose_fighter_primary():
     return primary
 
 
-def choose_fighting_style():
-    """Choose a fighter's fighting style"""
+def choose_fighting_style(styles_list):
+    """Choose a character's fighting style"""
     styles = [
         {
             "Name": "Archery",
@@ -74,7 +74,11 @@ def choose_fighting_style():
             "Level": 1
         },
     ]
-    style = random.choice(styles)
+    valid = False
+    while valid == False:
+        style = random.choice(styles)
+        if style["Name"] in styles_list:
+            valid = True
     return style
 
 
@@ -99,7 +103,13 @@ def load_class_file(classname):
         class_definition["Tool Proficiencies"] = get_instruments()
     if classname == "Fighter":
         class_definition["Primary"] = choose_fighter_primary()
-        class_definition["Powers"].append(choose_fighting_style())
+        class_definition["Powers"].append(
+            choose_fighting_style(class_definition["Styles List"])
+            )
     if classname == "Monk":
         class_definition["Tool Proficiencies"] = monk_tools()
+    if classname == "Paladin":
+        class_definition["Powers"].append(
+            choose_fighting_style(class_definition["Styles List"])
+            )
     return class_definition

@@ -38,8 +38,11 @@ def calc_spells_known(classname, level, casting_mod=0):
             ]
         spells_known_total = spells_per_level[level-1]
         return spells_known_total
-    if classname == "Cleric" or "Druid":
+    elif classname == "Cleric" or classname == "Druid":
         spells_prepared = level + casting_mod
+        return spells_prepared
+    elif classname == "Paladin":
+        spells_prepared = math.floor(level/2) + casting_mod
         return spells_prepared
 
 
@@ -49,6 +52,8 @@ with open('spells.json') as spell_file:
 
 def spells_known(level, char_class, casting_mod):
     """Create a random spell list for a character"""
+    if (char_class == "Paladin" or char_class == "Ranger") and level == 1:
+        return []
     if char_class in ["Paladin", "Ranger"]:
         spell_level = math.ceil(level/2)
         if level == 1:

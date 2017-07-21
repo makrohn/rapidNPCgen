@@ -33,15 +33,29 @@
     "8": ["Animal Shapes", "Antipathy/Sympathy", "Control Weather", "Earthquake", "Feeblemind", "Sunburst", "Tsunami"],
     "9": ["Foresight", "Shapechange", "Storm of Vengeance", "True Resurrection"]
   }, 
+  "Paladin": {
+    "1": ["Bless", "Command", "Compelled Duel", "Cure Wounds", "Detect Evil and Good", "Detect Magic", "Detect Poison and Disease", "Divine Favor", "Heroism", "Protection from Evil and Good", "Purify Food and Drink", "Searing Smite", "Shield of Faith", "Thunderous Smite", "Wrathful Smite"],
+    "2": ["Aid", "Branding Smite", "Find Steed", "Lesser Restoration", "Locate Object", "Magic Weapon", "Protection from Poison", "Zone of Truth"],
+    "3": ["Aura of Vitality", "Blinding Smite", "Create Food and Water", "Crusader's Mantle", "Daylight", "Dispel Magic", "Elemental Weapon", "Magic Circle", "Remove Curse", "Revivify"],
+    "4": ["Aura of Life", "Aura of Purity", "Banishment", "Death Ward", "Locate Creature", "Staggering Smite"],
+    "5": ["Banishing Smite", "Circle of Power", "Destructive Smite", "Dispel Evil and Good", "Geas", "Raise Dead"]
+  },
+  "Ranger": {
+    "1": ["Alarm", "Animal Friendship", "Cure Wounds", "Detect Magic", "Detect Poison and Disease", "Ensnaring Strike", "Fog Cloud", "Goodberry", "Hail of Thorns", "Hunter’s Mark", "Jump", "Longstrider", "Speak with Animals"],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": []
+  },
   "Dummy": {
-    "1": [], 
-    "2": [], 
-    "3": [], 
-    "4": [], 
-    "5": [], 
-    "6": [], 
-    "7": [], 
-    "8": [], 
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": [],
+    "6": [],
+    "7": [],
+    "8": [],
     "9": []
   }
 }

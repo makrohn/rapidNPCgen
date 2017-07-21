@@ -8,6 +8,7 @@
     "Hit Dice": 10,
     "Skill List": ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"],
     "Skill Picks": 2,
+    "Styles List": ["Archery", "Defense", "Dueling", "Great Weapon Fighting", "Protection", "Two-Weapon Fighting"],
     "Powers": [
         {
             "Name": "Second Wind",
@@ -16,7 +17,7 @@
         },
         {
             "Name": "Action Surge",
-            "Text": "You can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action. Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
+            "Text": "You can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action. Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn. ",
             "Level": 2
         }
     ]
