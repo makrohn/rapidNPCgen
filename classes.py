@@ -2,7 +2,7 @@
 
 import random
 
-CLASS_LIST = ["Barbarian", "Bard", "Cleric"]
+CLASS_LIST = ["Barbarian", "Bard", "Cleric", "Druid"]
 
 
 def get_instruments():
@@ -170,8 +170,49 @@ CLERIC = {
     ],
 }
 
+DRUID = {
+    "Name": "Druid",
+    "Primary": "Wisdom",
+    "Secondary": "Constitution",
+    "Armor Proficiencies": ["Light", "Medium", "Shields"],
+    "Weapon Proficiencies": [
+        "Club", "Dagger", "Dart", "Javelin", "Mace", "Quarterstaff",
+        "Scimitar", "Sickle", "Sling", "Spear"
+        ],
+    "Tool Proficiencies": ["Herbalism kit"],
+    "Saves": ["Intelligence", "Wisdom"],
+    "Hit Dice": 8,
+    "Skill List": [
+        "Arcana", "Animal Handling", "Insight", "Medicine", "Nature",
+        "Perception", "Religion", "Survival"],
+    "Skill Picks": 2,
+    "Caster": True,
+    "Casting Stat": "Wisdom",
+    "Powers": [
+        {
+            "Name": "Druidic",
+            "Text": "You know Druidic, the secret language of druids. You can "
+                    "speak the language and use it to leave hidden messages. "
+                    "You and others who know this language automatically spot "
+                    "such a message. Others spot the message’s presence with "
+                    "a successful DC 15 Wisdom (Perception) check but can’t "
+                    "decipher it without magic.",
+            "Level": 1,
+        },
+        {
+            "Name": "Wild Shape",
+            "Text": "you can use your action to magically assume the shape of "
+                    "a beast that you have seen before. You can use this "
+                    "feature twice. You regain expended uses when you finish "
+                    "a short or long rest.",
+            "Level": 2,
+        },
+    ],
+}
+
 CLASSES = {
     "Barbarian": BARBARIAN,
     "Bard": BARD,
     "Cleric": CLERIC,
+    "Druid": DRUID,
     }
