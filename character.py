@@ -55,7 +55,10 @@ class NPC(object):
             self.level, self.ability_bonuses['Constitution']
             )
         if "Caster" in self.char_class:
-            self.spell_list = spells.spells_known(self.level, classname)
+            self.spell_list = spells.spells_known(
+                self.level, classname, 
+                self.ability_bonuses[self.char_class["Casting Stat"]]
+                )
         self.armor = armor.choose_armor(
             self.armor_proficiencies, self.level,
             self.ability_scores['Strength']

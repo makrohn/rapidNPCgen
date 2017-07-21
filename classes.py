@@ -2,7 +2,7 @@
 
 import random
 
-CLASS_LIST = ["Barbarian", "Bard"]
+CLASS_LIST = ["Barbarian", "Bard", "Cleric"]
 
 
 def get_instruments():
@@ -88,6 +88,7 @@ BARD = {
         ],
     "Skill Picks": 3,
     "Caster": True,
+    "Casting Stat": "Charisma",
     "Powers": [
         {
             "Name": "Bardic Inspiration",
@@ -125,7 +126,52 @@ BARD = {
     ]
 }
 
+CLERIC = {
+    "Name": "Cleric",
+    "Primary": "Wisdom",
+    "Secondary": "Charisma",
+    "Armor Proficiencies": ["Light", "Medium", "Shields"],
+    "Weapon Proficiencies": ["Simple"],
+    "Tool Proficiencies": [],
+    "Saves": ["Wisdom", "Charisma"],
+    "Hit Dice": 8,
+    "Skill List": ["History", "Insight", "Medicine", "Persuasion", "Religon"],
+    "Skill Picks": 2,
+    "Caster": True,
+    "Casting Stat": "Wisdom",
+    "Powers": [
+        {
+            "Name": "Channel Divinity",
+            "Text": "You gain the ability to channel divine energy directly"
+                    "from your deity, using that energy to fuel magical "
+                    "effects. You start with two such effects: Turn Undead and"
+                    " an effect determined by your domain. When you use your "
+                    "Channel Divinity, you choose which effect to create. You "
+                    "must then finish a short or long rest to use your "
+                    "Channel Divinity again.",
+            "Level": 2,
+        },
+        {
+            "Name": "Channel Divinity: Turn Undead",
+            "Text": "As an action, you present your holy symbol and speak a "
+                    "prayer censuring the undead. Each undead that can see or "
+                    "hear you within 30 feet of you must make a Wisdom saving "
+                    "throw. If the creature fails its saving throw, it is "
+                    "turned for 1 minute or until it takes any damage. A "
+                    "turned creature must spend its turns trying to move as "
+                    "far away from you as it can, and it can’t willingly move "
+                    "to a space within 30 feet of you. It also can’t take "
+                    "reactions. For its action, it can use only the Dash "
+                    "action or try to escape from an effect that prevents it "
+                    "from moving. If there’s nowhere to move, the creature "
+                    "can use the Dodge action.",
+            "Level": 2,
+        },
+    ],
+}
+
 CLASSES = {
     "Barbarian": BARBARIAN,
     "Bard": BARD,
+    "Cleric": CLERIC,
     }
