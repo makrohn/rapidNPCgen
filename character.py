@@ -39,7 +39,7 @@ class NPC(object):
         self.name = npcname
         self.level = level
         self.bonus = self.get_proficiency_bonus()
-        self.char_class = classes.CLASSES[classname]
+        self.char_class = classes.load_class_file(classname)
         self.race = load_race(race, subrace)
         self.subrace = subrace
         self.ability_scores = self.assign_ability_scores(level)
