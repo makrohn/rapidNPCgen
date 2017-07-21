@@ -41,10 +41,9 @@ def calc_spells_known(classname, level, casting_mod=0):
     elif classname == "Cleric" or classname == "Druid":
         spells_prepared = level + casting_mod
         return spells_prepared
-    elif classname == "Paladin":
+    elif classname == "Paladin" or classname == "Ranger":
         spells_prepared = math.floor(level/2) + casting_mod
         return spells_prepared
-
 
 with open('spells.json') as spell_file:
     SPELL_LISTS = json.loads(spell_file.read())
