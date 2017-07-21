@@ -99,11 +99,13 @@ class NPC(object):
         ability_scores[self.char_class["Secondary"]] = scores_left[0]
         del scores_left[0]
         abilities_left.remove(self.char_class["Secondary"])
-        while len(abilities_left) > 0:
+        counter = len(abilities_left)
+        while counter > 0:
             next_ability = random.choice(abilities_left)
             ability_scores[next_ability] = scores_left[0]
             del scores_left[0]
             abilities_left.remove(next_ability)
+            counter -= 1
         for ability in self.race["Abilities"]:
             ability_scores[ability] += self.race["Abilities"][ability]
         ability_ups = math.floor(level/4)
@@ -116,7 +118,7 @@ class NPC(object):
                 ability_scores[self.char_class["Secondary"]] += 1
                 ability_ups -= 1
             else:
-                abilities = [ability for ability in self.ability_scores]
+                abilities = [ability for ability in ability_scores]
                 stat_up = random.choice(abilities)
                 if ability_scores[stat_up] < 20:
                     ability_scores[stat_up] += 1
@@ -135,19 +137,11 @@ class NPC(object):
             self.char_class["Weapon Proficiencies"]
             )
 
-        try:
-            self.race["Armor Proficiencies"]
-        except:
-            self.race["Armor Proficiencies"] = []
         self.armor_proficiencies = (
             self.race["Armor Proficiencies"] +
             self.char_class["Armor Proficiencies"]
             )
 
-        try:
-            self.char_class["Tool Proficiencies"]
-        except:
-            self.char_class["Tool Proficiencies"] = []
         self.tool_proficiencies = (
             self.race["Tool Proficiencies"] +
             self.char_class["Tool Proficiencies"]
