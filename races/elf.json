@@ -1,0 +1,21 @@
+{
+    "Name": "Elf",
+    "Abilities": {"Dexterity": 2},
+    "Size": "Medium",
+    "Speed": 30,
+    "Darkvision": 60,
+    "Weapon Proficiencies": [],
+    "Tool Proficiencies": [],
+    "Languages": ["Elvish", "Common"],
+    "Powers": [
+        {
+            "Name": "Fey Ancestry",
+            "Text": "You have advantage on saving throws against being charmed, and magic can’t put you to sleep."
+        },
+        {
+            "Name": "Trance",
+            "Text": "Elves don’t need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day."
+        }
+    ],
+    "Subraces": ["High Elf", "Wood Elf", "Drow"]
+}

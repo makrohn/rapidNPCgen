@@ -1,0 +1,25 @@
+{
+    "Name": "Halfling",
+    "Abilities": {"Dexterity": 2},
+    "Size": "Small",
+    "Speed": 25,
+    "Darkvision": 0,
+    "Weapon Proficiencies": [],
+    "Tool Proficiencies": [],
+    "Languages": ["Halfling", "Common"],
+    "Powers": [
+        {
+            "Name": "Lucky",
+            "Text": "When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll."
+        },
+        {
+            "Name": "Brave",
+            "Text": "You have advantage on saving throws against being frightened."
+        },
+        {
+            "Name": "Halfling Nimbleness",
+            "Text": "You can move through the space of any creature that is of a size larger than yours."
+        }
+    ],
+    "Subraces": ["Lightfoot", "Stout"]
+}

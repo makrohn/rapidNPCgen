@@ -1,0 +1,15 @@
+{
+    "Name": "Half-Elf",
+    "Size": "Medium",
+    "Speed": 30,
+    "Darkvision": 60,
+    "Weapon Proficiencies": [],
+    "Tool Proficiencies": [],
+    "Languages": ["Elvish", "Common", "One more"],
+    "Powers": [
+        {
+            "Name": "Fey Ancestry",
+            "Text": "You have advantage on saving throws against being charmed, and magic can’t put you to sleep."
+        }
+    ]
+}

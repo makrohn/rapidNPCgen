@@ -1,0 +1,21 @@
+{
+    "Name": "Half-Orc",
+    "Abilities": {"Strength": 2, "Constitution": 1},
+    "Size": "Medium",
+    "Speed": 30,
+    "Darkvision": 60,
+    "Weapon Proficiencies": [],
+    "Tool Proficiencies": [],
+    "Languages": ["Orc", "Common"],
+    "Skills": ["Intimidation"],
+    "Powers": [
+        {
+            "Name": "Relentless Endurance",
+            "Text": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can’t use this feature again until you finish a long rest."
+        },
+        {
+            "Name": "Savage Attacks",
+            "Text": "When you score a critical hit with a melee weapon attack, you can roll one of the weapon’s damage dice one additional time and add it to the extra damage of the critical hit."
+        }
+    ]
+}

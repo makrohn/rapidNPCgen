@@ -1,6 +1,7 @@
 """Module to hold 5e Race definitions"""
 
 import random
+import json
 
 RACE_LIST = [
     "Dwarf", "Elf", "Halfling", "Human", "Dragonborn", "Gnome", "Half-Elf",
@@ -43,218 +44,6 @@ def halfelf_skills():
     skills = [first_skill, second_skill]
     return skills
 
-DWARF = {
-    "Name": "Dwarf",
-    "Abilities": {"Constitution": 2},
-    "Size": "Medium",
-    "Speed": 25,
-    "Darkvision": 60,
-    "Weapon Proficiencies": [
-        "Battleaxe",
-        "Handaxe",
-        "Throwing Hammer",
-        "Warhammer",
-        ],
-    "Tool Proficiencies": get_dwarf_tools(),
-    "Languages": ["Dwarvish", "Common"],
-    "Powers": [
-        {
-            "Name": "Dwarven Resilience",
-            "Text": "You have advantage on saving throws against poison, and "
-                    "you have resistance against poison damage"
-        },
-        {
-            "Name": "Stonecunning",
-            "Text": "Whenever you make an Intelligence (History) check "
-                    "related to the origin of stonework, you are considered "
-                    "proficient in the History skill and add double your "
-                    "proficiency bonus to the check, instead of your normal "
-                    "proficiency bonus."
-        }
-    ],
-    "Subraces": ["Hill", "Mountain"]
-}
-
-ELF = {
-    "Name": "Elf",
-    "Abilities": {"Dexterity": 2},
-    "Size": "Medium",
-    "Speed": 30,
-    "Darkvision": 60,
-    "Weapon Proficiencies": [],
-    "Tool Proficiencies": [],
-    "Languages": ["Elvish", "Common"],
-    "Powers": [
-        {
-            "Name": "Fey Ancestry",
-            "Text": "You have advantage on saving throws against being "
-                    "charmed, and magic can’t put you to sleep."
-        },
-        {
-            "Name": "Trance",
-            "Text": "Elves don’t need to sleep. Instead, they meditate "
-                    "deeply, remaining semiconscious, for 4 hours a day."
-        }
-    ],
-    "Subraces": ["High Elf", "Wood Elf", "Drow"]
-}
-
-HALFLING = {
-    "Name": "Halfling",
-    "Abilities": {"Dexterity": 2},
-    "Size": "Small",
-    "Speed": 25,
-    "Darkvision": 0,
-    "Weapon Proficiencies": [],
-    "Tool Proficiencies": [],
-    "Languages": ["Halfling", "Common"],
-    "Powers": [
-        {
-            "Name": "Lucky",
-            "Text": "When you roll a 1 on an attack roll, ability check, or "
-                    "saving throw, you can reroll the die and must use the "
-                    "new roll."
-        },
-        {
-            "Name": "Brave",
-            "Text": "You have advantage on saving throws against being "
-                    "frightened."
-        },
-        {
-            "Name": "Halfling Nimbleness",
-            "Text": "You can move through the space of any creature that is "
-                    "of a size larger than yours."
-        },
-    ],
-    "Subraces": ["Lightfoot", "Stout"]
-}
-
-HUMAN = {
-    "Name": "Human",
-    "Abilities": {
-        "Strength": 1, "Dexterity": 1, "Constitution": 1,
-        "Intelligence": 1, "Wisdom": 1, "Charisma": 1
-        },
-    "Size": "Medium",
-    "Speed": 30,
-    "Darkvision": 0,
-    "Weapon Proficiencies": [],
-    "Tool Proficiencies": [],
-    "Languages": ["One more", "Common"],
-    "Powers": [],
-}
-
-DRAGONBORN = {
-    "Name": "Dragonborn",
-    "Abilities": {"Strength": 2, "Charisma": 1},
-    "Size": "Medium",
-    "Speed": 30,
-    "Darkvision": 0,
-    "Weapon Proficiencies": [],
-    "Tool Proficiencies": [],
-    "Languages": ["Draconic", "Common"],
-    "Powers": [
-        {
-            "Name": "Draconic Ancestry",
-            "Text": "You have draconic ancestry. Choose one type of dragon "
-                    "from the Draconic Ancestry table."
-        },
-        {
-            "Name": "Breath Weapon",
-            "Text": "You can use your action to exhale destructive energy. "
-                    "Your draconic ancestry determines the size, shape, and "
-                    "damage type of the exhalation. When you use your breath "
-                    "weapon, each creature in the area of the exhalation must "
-                    "make a saving throw, the type of which is determined by "
-                    "your draconic ancestry. The DC for this saving throw "
-                    "equals 8 + your Constitution modifier + your proficiency "
-                    "bonus. A creature takes 2d6 damage on a failed save, and "
-                    "half as much damage on a successful one. The damage "
-                    "increases to 3d6 at 6th level, 4d6 at 11th level, and "
-                    "5d6 at 16th level."
-
-        },
-        {
-            "Name": "Damage Resistance",
-            "Text": "You have resistance to the damage type associated with "
-                    "your draconic ancestry."
-        },
-    ],
-}
-
-GNOME = {
-    "Name": "Gnome",
-    "Abilities": {"Intelligence": 2},
-    "Size": "Small",
-    "Speed": 25,
-    "Darkvision": 60,
-    "Weapon Proficiencies": [],
-    "Tool Proficiencies": [],
-    "Languages": ["Gnomish", "Common"],
-    "Powers": [
-        {
-            "Name": "Gnome Cunning",
-            "Text": "You have advantage on all Intelligence, Wisdom, and "
-                    "Charisma saving throws against magic."
-        },
-        {
-            "Name": "Stonecunning",
-            "Text": "Whenever you make an Intelligence (History) check "
-                    "related to the origin of stonework, you are considered "
-                    "proficient in the History skill and add double your "
-                    "proficiency bonus to the check, instead of your normal "
-                    "proficiency bonus."
-        }
-    ],
-    "Subraces": ["Forest", "Rock"]
-}
-
-HALFELF = {
-    "Name": "Half-Elf",
-    "Abilities": halfelf_abilities(),
-    "Size": "Medium",
-    "Speed": 30,
-    "Darkvision": 60,
-    "Weapon Proficiencies": [],
-    "Tool Proficiencies": [],
-    "Languages": ["Elvish", "Common", "One more"],
-    "Skills": halfelf_skills(),
-    "Powers": [
-        {
-            "Name": "Fey Ancestry",
-            "Text": "You have advantage on saving throws against being"
-                    " charmed, and magic can’t put you to sleep."
-        },
-    ],
-}
-
-HALFORC = {
-    "Name": "Half-Orc",
-    "Abilities": {"Strength": 2, "Constitution": 1},
-    "Size": "Medium",
-    "Speed": 30,
-    "Darkvision": 60,
-    "Weapon Proficiencies": [],
-    "Tool Proficiencies": [],
-    "Languages": ["Orc", "Common"],
-    "Skills": ["Intimidation"],
-    "Powers": [
-        {
-            "Name": "Relentless Endurance",
-            "Text": "When you are reduced to 0 hit points but not killed "
-                    "outright, you can drop to 1 hit point instead. You can’t "
-                    "use this feature again until you finish a long rest."
-        },
-        {
-            "Name": "Savage Attacks",
-            "Text": "When you score a critical hit with a melee weapon "
-                    "attack, you can roll one of the weapon’s damage dice one "
-                    "additional time and add it to the extra damage of the "
-                    "critical hit."
-        }
-    ],
-}
-
 TIEFLING = {
     "Name": "Tiefling",
     "Abilities": {"Charisma": 2, "Intelligence": 1},
@@ -280,66 +69,54 @@ TIEFLING = {
     ],
 }
 
-RACES = {
-    "Dwarf": DWARF,
-    "Elf": ELF,
-    "Halfling": HALFLING,
-    "Human": HUMAN,
-    "Dragonborn": DRAGONBORN,
-    "Gnome": GNOME,
-    "Half-Elf": HALFELF,
-    "Half-Orc": HALFORC,
-    "Tiefling": TIEFLING,
-    }
 
-
-def subrace_dwarf(subrace):
+def subrace_dwarf(race_def, subrace):
     """Set Dwarf subrace values"""
     if "Hill" in subrace:
-        RACES["Dwarf"]["Abilities"]["Wisdom"] = 1
+        race_def["Abilities"]["Wisdom"] = 1
     elif "Mountain" in subrace:
-        RACES["Dwarf"]["Abilities"]["Strength"] = 2
-        RACES["Dwarf"]["Armor Proficiencies"] = ["Light", "Medium"]
+        race_def["Abilities"]["Strength"] = 2
+        race_def["Armor Proficiencies"] = ["Light", "Medium"]
     else:
-        return "Invalid subrace choice"
+        print("Invalid subrace choice")
+    return race_def
 
-
-def subrace_elf(subrace):
+def subrace_elf(race_def, subrace):
     """Set Elf subrace values"""
     if "High" in subrace:
-        RACES["Elf"]["Abilities"]["Intelligence"] = 1
-        RACES["Elf"]["Weapon Proficiencies"] = [
+        race_def["Abilities"]["Intelligence"] = 1
+        race_def["Weapon Proficiencies"] = [
             "Longsword", "Shortsword", "Shortbow", "Longbow"
             ]
-        RACES["Elf"]["Powers"].append({
+        race_def["Powers"].append({
             "Name": "Extra cantrip",
             "Text": "You know one extra cantrip of your choice from the "
                     "wizard spell list. Intelligence is your spellcasting "
                     "ability for it"
             })
-        RACES["Elf"]["Languages"].append("One extra")
+        race_def["Languages"].append("One extra")
     elif "Wood" in subrace:
-        RACES["Elf"]["Abilities"]["Wisdom"] = 1
-        RACES["Elf"]["Weapon Proficiencies"] = [
+        race_def["Abilities"]["Wisdom"] = 1
+        race_def["Weapon Proficiencies"] = [
             "Longsword", "Shortsword", "Shortbow", "Longbow"
             ]
-        RACES["Elf"]["Powers"].append({
+        race_def["Powers"].append({
             "Name": "Mask of the Wild",
             "Text": "You can attempt to hide even when you are only "
                     "lightly obscured by foliage, heavy rain, falling "
                     "snow, mist, and other natural phenomena."
             })
     elif "Drow" in subrace:
-        RACES["Elf"]["Abilities"]["Charisma"] = 1
-        RACES["Elf"]["Darkvision"] = 120
-        RACES["Elf"]["Powers"].append({
+        race_def["Abilities"]["Charisma"] = 1
+        race_def["Darkvision"] = 120
+        race_def["Powers"].append({
             "Name": "Sunlight Sensitivity",
             "Text": "You have disadvantage on attack rolls and on Wisdom "
                     "(Perception) checks that rely on sight when you, "
                     "the target of your attack, or whatever you are "
                     "trying to perceive is in direct sunlight."
             })
-        RACES["Elf"]["Powers"].append({
+        race_def["Powers"].append({
             "Name": "Drow Magic",
             "Text": "You know the dancing lights cantrip. When you reach "
                     "3rd level, you can cast the faerie fire spell once "
@@ -347,44 +124,46 @@ def subrace_elf(subrace):
                     "the darkness spell once per day. Charisma is your "
                     "spellcasting ability for these spells."
             })
-        RACES["Elf"]["Weapon Proficiencies"] = [
+        race_def["Weapon Proficiencies"] = [
             "Rapier", "Shortsword", "Crossbow, hand"
             ]
     else:
-        return "Invalid subrace choice"
+        print("Invalid subrace choice")
+    return race_def
 
 
-def subrace_halfling(subrace):
+def subrace_halfling(race_def, subrace):
     """Set Halfling subrace values"""
     if "Lightfoot" in subrace:
-        RACES["Halfling"]["Abilities"]["Charisma"] = 1
-        RACES["Halfling"]["Powers"].append({
+        race_def["Abilities"]["Charisma"] = 1
+        race_def["Powers"].append({
             "Name": "Naturally Stealthy",
             "Text": "You can attempt to hide even when you are obscured "
                     "only by a creature that is at least one size larger "
                     "than you."
             })
     elif "Stout" in subrace:
-        RACES["Halfling"]["Abilities"]["Constitution"] = 1
-        RACES["Halfling"]["Powers"].append({
+        race_def["Abilities"]["Constitution"] = 1
+        race_def["Powers"].append({
             "Name": "Stout Resilience",
             "Text": "You have advantage on saving throws against poison, "
                     "and you have resistance against poison damage"
             })
     else:
-        return "Invalid subrace choice"
+        print("Invalid subrace choice")
+    return race_def
 
 
-def subrace_gnome(subrace):
+def subrace_gnome(race_def, subrace):
     """Set Gnome subrace values"""
     if "Forest" in subrace:
-        RACES["Gnome"]["Abilities"]["Dexterity"] = 1
-        RACES["Gnome"]["Powers"].append({
+        race_def["Abilities"]["Dexterity"] = 1
+        race_def["Powers"].append({
             "Name": "Natural Illusionist",
             "Text": "You know the minor illusion cantrip. Intelligence is "
                     "your spellcasting ability for it."
             })
-        RACES["Gnome"]["Powers"].append({
+        race_def["Powers"].append({
             "Name": "Speak with Small Beasts",
             "Text": "Through sounds and gestures, you can communicate "
                     "simple ideas with Small or smaller beasts. Forest "
@@ -393,8 +172,8 @@ def subrace_gnome(subrace):
                     "creatures as beloved pets."
             })
     elif "Rock" in subrace:
-        RACES["Gnome"]["Abilities"]["Constitution"] = 1
-        RACES["Gnome"]["Powers"].append({
+        race_def["Abilities"]["Constitution"] = 1
+        race_def["Powers"].append({
             "Name": "Artificer's Lore",
             "Text": "Whenever you make an Intelligence (History) check "
                     "related to magic items, alchemical objects, or "
@@ -402,7 +181,7 @@ def subrace_gnome(subrace):
                     "proficiency bonus, instead of any proficiency bonus "
                     "you normally apply."
             })
-        RACES["Gnome"]["Powers"].append({
+        race_def["Powers"].append({
             "Name": "Tinker",
             "Text": "You have proficiency with artisan’s tools (tinker’s "
                     "tools). Using those tools, you can spend 1 hour and "
@@ -410,16 +189,25 @@ def subrace_gnome(subrace):
                     "clockwork device (AC 5, 1 hp)."
             })
     else:
-        return "Invalid subrace choice"
+        print("Invalid subrace choice")
+    return race_def
 
 
-def get_subrace(race, subrace):
-    """Method to add subracial characteristics"""
-    if race == "Dwarf":
-        subrace_dwarf(subrace)
-    elif race == "Elf":
-        subrace_elf(subrace)
-    elif race == "Halfling":
-        subrace_halfling(subrace)
-    elif race == "Gnome":
-        subrace_gnome(subrace)
+def load_race_file(racename, subrace=""):
+    """Load a race's json file and sets other attributes as needed"""
+    filename = "races/" + racename.lower() + '.json'
+    with open(filename) as race_file:
+        race_definition = json.loads(race_file.read())
+    if racename == "Dwarf":
+        race_definition["Tool Proficiencies"] = get_dwarf_tools()
+        race_definition = subrace_dwarf(race_definition, subrace)
+    if racename == "Elf":
+        race_definition = subrace_elf(race_definition, subrace)
+    if racename == "Halfling":
+        race_definition = subrace_halfling(race_definition, subrace)
+    if racename == "Gnome":
+        race_definition = subrace_gnome(race_definition, subrace)
+    if racename == "Half-Elf":
+        race_definition["Abilities"] = halfelf_abilities()
+        race_definition["Skills"] = halfelf_skills()
+    return race_definition

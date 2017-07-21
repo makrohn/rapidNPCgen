@@ -1,0 +1,25 @@
+{
+    "Name": "Dwarf",
+    "Abilities": {"Constitution": 2},
+    "Size": "Medium",
+    "Speed": 25,
+    "Darkvision": 60,
+    "Weapon Proficiencies": [
+        "Battleaxe",
+        "Handaxe",
+        "Throwing Hammer",
+        "Warhammer"
+        ],
+    "Languages": ["Dwarvish", "Common"],
+    "Powers": [
+        {
+            "Name": "Dwarven Resilience",
+            "Text": "You have advantage on saving throws against poison, and you have resistance against poison damage"
+        },
+        {
+            "Name": "Stonecunning",
+            "Text": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+        }
+    ],
+    "Subraces": ["Hill", "Mountain"]
+}

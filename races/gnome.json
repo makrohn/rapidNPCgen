@@ -1,0 +1,21 @@
+{
+    "Name": "Gnome",
+    "Abilities": {"Intelligence": 2},
+    "Size": "Small",
+    "Speed": 25,
+    "Darkvision": 60,
+    "Weapon Proficiencies": [],
+    "Tool Proficiencies": [],
+    "Languages": ["Gnomish", "Common"],
+    "Powers": [
+        {
+            "Name": "Gnome Cunning",
+            "Text": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic."
+        },
+        {
+            "Name": "Stonecunning",
+            "Text": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+        }
+    ],
+    "Subraces": ["Forest", "Rock"]
+}
