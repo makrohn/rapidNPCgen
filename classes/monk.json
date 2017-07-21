@@ -1,0 +1,39 @@
+{
+    "Name": "Monk",
+    "Primary": "Dexterity",
+    "Secondary": "Wisdom",
+    "Armor Proficiencies": [],
+    "Weapon Proficiencies": ["Simple", "Shortsword"],
+    "Tool Proficiencies": [],
+    "Saves": ["Strength", "Dexterity"],
+    "Hit Dice": 8,
+    "Skill List": ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"],
+    "Skill Picks": 2,
+    "Powers": [
+        {
+            "Name": "Martial Arts",
+            "Text": "You can use Dexterity instead of Strength for the attack and damage rolls of your unarmed strikes and monk weapons. You can roll a d4 in place of the normal damage of your unarmed strike or monk weapon. When you use the Attack action with an unarmed strike or a monk weapon on your turn, you can make one unarmed strike as a bonus action.",
+            "Level": 2
+        },
+        {
+            "Name": "Ki",
+            "Text": "You have Ki points equal to your level. When you spend a ki point, it is unavailable until you finish a short or long rest.",
+            "Level": 2
+        },
+        {
+            "Name": "Flurry of Blows",
+            "Text": "Immediately after you take the Attack action on your turn, you can spend 1 ki point to make two unarmed strikes as a bonus action.",
+            "Level": 2
+        },
+        {
+            "Name": "Patient Defense",
+            "Text": "You can spend 1 ki point to take the Dodge action as a bonus action on your turn.",
+            "Level": 2
+        },
+        {
+            "Name": "Step of the Wind",
+            "Text": "You can spend 1 ki point to take the Disengage or Dash action as a bonus action on your turn, and your jump distance is doubled for the turn.",
+            "Level": 2
+        }
+    ]
+}

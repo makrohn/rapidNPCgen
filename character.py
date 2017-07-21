@@ -50,10 +50,14 @@ class NPC(object):
                 self.level, classname,
                 self.ability_bonuses[self.char_class["Casting Stat"]]
                 )
-        self.armor = armor.choose_armor(
-            self.armor_proficiencies, self.level,
-            self.ability_scores['Strength']
-            )
+        if self.char_class["Name"] != "Monk":
+            self.armor = armor.choose_armor(
+                self.armor_proficiencies, self.level,
+                self.ability_scores['Strength']
+                )
+        else:
+            self.armor = ["None"]
+            self.unarmored_movement()
         self.armor_class = self.calc_ac()
 
     def get_powers(self):
@@ -217,6 +221,9 @@ class NPC(object):
         for item in self.armor:
             if item["Name"] == "Shield":
                 armor_class += 2
+        for power in self.char_class["Powers"]:
+            if power["Name"] == "Defense":
+                armor_class += 1
         return armor_class
 
     def calc_initiative(self):
@@ -225,6 +232,11 @@ class NPC(object):
         if self.char_class["Name"] == "Bard" and self.level >= 2:
             initiative += math.floor(self.get_proficiency_bonus()/2)
         return initiative
+
+    def unarmored_movement(self):
+        if self.level > 1:
+            movement_bonus = (math.ceil((self.level-1)/4) + 1) * 5
+        self.race["Speed"] += movement_bonus
 
 
 def print_character(npc):
