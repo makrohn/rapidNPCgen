@@ -30,14 +30,13 @@ class NPC(object):
     def __init__(self, npcname, classname, race, level, subrace=""):
         self.name = npcname
         self.level = level
-        self.bonus = self.get_proficiency_bonus()
         self.char_class = classes.load_class_file(classname)
         self.race = races.load_race_file(race, subrace)
         self.subrace = subrace
         self.ability_scores = self.assign_ability_scores(level)
         self.calculate_proficiencies()
         self.skill_proficiencies = self.find_skills()
-        self.calc_skills()
+        self.skills = self.calc_skills()
         self.melee = weapons.choose_melee(self.weapon_proficiencies)
         self.ranged = weapons.choose_ranged(self.weapon_proficiencies)
         self.powers = (
@@ -174,50 +173,31 @@ class NPC(object):
     def calc_skills(self):
         """Assign values to skill bonuses"""
         skills = {}
+        proficiency_bonus = self.get_proficiency_bonus()
 
         joat_bonus = 0
-        if self.char_class == "Bard" and self.level >= 2:
-            joat_bonus = math.floor(self.bonus/2)
+        if self.char_class["Name"] == "Bard" and self.level >= 2:
+            joat_bonus = math.floor(proficiency_bonus/2)
 
-        for skill in STR_SKILLS:
-            if skill in self.skill_proficiencies:
-                skills[skill] = self.ability_bonuses['Strength'] + self.bonus
-            else:
-                skills[skill] = self.ability_bonuses['Strength'] + joat_bonus
+        stat_map = {
+            "Strength": STR_SKILLS, "Dexterity": DEX_SKILLS,
+            "Intelligence": INT_SKILLS, "Charisma": CHA_SKILLS,
+            "Wisdom": WIS_SKILLS
+            }
 
-        for skill in DEX_SKILLS:
-            if skill in self.skill_proficiencies:
-                skills[skill] = self.ability_bonuses['Dexterity'] + self.bonus
-            else:
-                skills[skill] = self.ability_bonuses['Dexterity'] + joat_bonus
-
-        for skill in INT_SKILLS:
-            if skill in self.skill_proficiencies:
-                skills[skill] = (
-                    self.ability_bonuses['Intelligence'] + self.bonus
-                    )
-            else:
-                skills[skill] = (
-                    self.ability_bonuses['Intelligence'] + joat_bonus
-                    )
-
-        for skill in WIS_SKILLS:
-            if skill in self.skill_proficiencies:
-                skills[skill] = self.ability_bonuses['Wisdom'] + self.bonus
-            else:
-                skills[skill] = self.ability_bonuses['Wisdom'] + joat_bonus
-
-        for skill in CHA_SKILLS:
-            if skill in self.skill_proficiencies:
-                skills[skill] = self.ability_bonuses['Charisma'] + self.bonus
-            else:
-                skills[skill] = self.ability_bonuses['Charisma'] + joat_bonus
-        self.skills = skills
+        for stat in stat_map:
+            for skill in stat_map[stat]:
+                if skill in self.skill_proficiencies:
+                    skills[skill] = self.ability_bonuses[stat] + proficiency_bonus
+                else:
+                    skills[skill] = self.ability_bonuses[stat] + joat_bonus
 
         saves = {}
         for save in self.char_class["Saves"]:
-            saves[save] = self.ability_bonuses[save] + self.bonus
+            saves[save] = self.ability_bonuses[save] + proficiency_bonus
         self.saves = saves
+
+        return skills
 
     def calc_ac(self):
         """Figure out a character's AC"""
@@ -249,7 +229,7 @@ class NPC(object):
         """Figure out a character's intiative"""
         initiative = self.ability_bonuses['Dexterity']
         if self.char_class["Name"] == "Bard" and self.level >= 2:
-            initiative += math.floor(self.bonus/2)
+            initiative += math.floor(self.get_proficiency_bonus()/2)
         return initiative
 
 
