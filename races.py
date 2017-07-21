@@ -44,31 +44,6 @@ def halfelf_skills():
     skills = [first_skill, second_skill]
     return skills
 
-TIEFLING = {
-    "Name": "Tiefling",
-    "Abilities": {"Charisma": 2, "Intelligence": 1},
-    "Size": "Medium",
-    "Speed": 30,
-    "Darkvision": 60,
-    "Weapon Proficiencies": [],
-    "Tool Proficiencies": [],
-    "Languages": ["Infernal", "Common"],
-    "Powers": [
-        {
-            "Name": "Hellish Resistance",
-            "Text": "You have resistance to fire damage."
-        },
-        {
-            "Name": "Infernal Legacy",
-            "Text": "You know the thaumaturgy cantrip. Once you reach 3rd "
-                    "level, you can cast the hellish rebuke spell once per "
-                    "day as a 2nd-level spell. Once you reach 5th level, you "
-                    "can also cast the darkness spell once per day. Charisma "
-                    "is your spellcasting ability for these spells."
-        }
-    ],
-}
-
 
 def subrace_dwarf(race_def, subrace):
     """Set Dwarf subrace values"""
@@ -80,6 +55,7 @@ def subrace_dwarf(race_def, subrace):
     else:
         print("Invalid subrace choice")
     return race_def
+
 
 def subrace_elf(race_def, subrace):
     """Set Elf subrace values"""

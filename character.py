@@ -25,14 +25,6 @@ ALL_SKILLS = STR_SKILLS + DEX_SKILLS + INT_SKILLS + WIS_SKILLS + CHA_SKILLS
 ALL_SKILLS = sorted(ALL_SKILLS)
 
 
-def load_race(racename, subrace=""):
-    """Load an NPC's race definition"""
-    if subrace != "":
-        races.get_subrace(racename, subrace)
-    race = races.RACES[racename]
-    return race
-
-
 class NPC(object):
     """Object to define the stat block of the NPC itself"""
     def __init__(self, npcname, classname, race, level, subrace=""):
@@ -56,7 +48,7 @@ class NPC(object):
             )
         if "Caster" in self.char_class:
             self.spell_list = spells.spells_known(
-                self.level, classname, 
+                self.level, classname,
                 self.ability_bonuses[self.char_class["Casting Stat"]]
                 )
         self.armor = armor.choose_armor(
@@ -301,15 +293,15 @@ def create_character():
     """Interactively request all the necessary fields to create an NPC"""
     name = input("Name? ")
     good_class = False
-    class_choices = list(range(1, len(classes.CLASSES)+1))
+    class_choices = list(range(1, len(classes.CLASS_LIST)+1))
     class_choices = [str(x) for x in class_choices]
     while good_class is False:
         print("Choose a class: ")
-        for item in classes.CLASSES:
-            print(str(classes.CLASSES.index(item) + 1) + ": " + item)
+        for item in classes.CLASS_LIST:
+            print(str(classes.CLASS_LIST.index(item) + 1) + ": " + item)
         class_choice = int(input("Enter the number for your choice: "))
-        if class_choice in list(range(1, len(classes.CLASSES) + 1)):
-            class_choice = classes.CLASSES[class_choice - 1]
+        if class_choice in list(range(1, len(classes.CLASS_LIST) + 1)):
+            class_choice = classes.CLASS_LIST[class_choice - 1]
             good_class = True
         else:
             print("Not a valid class choice")
@@ -334,7 +326,7 @@ def create_character():
             good_race = True
         else:
             print("Not a valid race choice")
-    race = races.RACES[race_choice]
+    race = races.load_race_file(race_choice)
     if "Subraces" in race:
         good_subrace = False
         subrace_choices = list(range(0, len(race["Subraces"])))
