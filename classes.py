@@ -23,7 +23,7 @@ def get_instruments():
 
 def load_class_file(classname):
     """Load a class's json file"""
-    filename = classname.lower() + '.json'
+    filename = "classes/" + classname.lower() + '.json'
     with open(filename) as class_file:
         class_definition = json.loads(class_file.read())
     if classname == "Bard":
