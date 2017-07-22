@@ -16,8 +16,10 @@ Just clone the repo to get started
 Right now, it's all classes and races from the PHB, but racial powers past level 2 aren't in there yet.
 ## Scope
 This isn't a character generator. I'm only interested in _possibly_ ever implementing one more question, for subclass. Anything else starts to impinge on "Rapid" and should be chosen randomly.
-## Looking for help
+## To do
 * Get the L3+ racial powers in
 * Automate more racial/class powers that affect other stats directly
 * Any races or classes that are in material beyond the PHB
 * Export to XML, or any other tool people would find handy (JSON is already implemented)
+* Add a django app so I can host it somewhere
+* Figure out some way to integrate with roll20
