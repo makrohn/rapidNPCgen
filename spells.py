@@ -45,6 +45,13 @@ def calc_spells_known(classname, level, casting_mod=0):
             ]
         spells_known_total = spells_per_level[level-1]
         return spells_known_total
+    if classname == "Warlock":
+        spells_per_level = [
+            2, 3, 4, 5, 6, 7, 8, 9, 10, 10,
+            11, 11, 12, 12, 13, 13, 14, 14, 15, 15
+            ]
+        spells_known_total = spells_per_level[level-1]
+        return spells_known_total
     elif classname == "Cleric" or classname == "Druid":
         spells_prepared = level + casting_mod
         return spells_prepared
@@ -66,7 +73,13 @@ def spells_known(level, char_class, casting_mod):
             spell_level = 0
     else:
         spell_level = level
-    highest_known = len(SPELL_SLOTS_MATRIX[str(spell_level)])
+    if char_class == "Warlock":
+        if level < 10:
+            highest_known = math.ceil(level/2)
+        elif level >= 10:
+            highest_known = 5
+    else:
+        highest_known = len(SPELL_SLOTS_MATRIX[str(spell_level)])
     spells_available = []
     counter = highest_known
     while counter > 0:
@@ -79,4 +92,13 @@ def spells_known(level, char_class, casting_mod):
         spell_list.append(new_spell)
         spells_available.remove(new_spell)
         remaining_known -= 1
+    if char_class == "Sorceror":
+        if level > 11:
+            spell_list.append(random.choice(SPELL_LISTS["Sorceror"]["6"]))
+        if level > 13:
+            spell_list.append(random.choice(SPELL_LISTS["Sorceror"]["7"]))
+        if level > 15:
+            spell_list.append(random.choice(SPELL_LISTS["Sorceror"]["8"]))
+        if level > 17:
+            spell_list.append(random.choice(SPELL_LISTS["Sorceror"]["9"]))
     return spell_list
