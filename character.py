@@ -9,11 +9,6 @@ import weapons
 import spells
 import armor
 
-ABILITIES = [
-    "Strength", "Dexterity", "Constitution",
-    "Intelligence", "Wisdom", "Charisma"
-    ]
-
 STR_SKILLS = ["Athletics"]
 DEX_SKILLS = ["Acrobatics", "Sleight of Hand", "Stealth"]
 INT_SKILLS = ["Arcana", "History", "Investigation", "Nature", "Religion"]
@@ -97,7 +92,10 @@ class NPC(object):
         """Assign ability scores according to standard matrix"""
         ability_scores = {}
         scores_left = [15, 14, 13, 12, 10, 8]
-        abilities_left = ABILITIES
+        abilities_left = [
+            "Strength", "Dexterity", "Constitution",
+            "Intelligence", "Wisdom", "Charisma"
+            ]
         ability_scores[self.char_class["Primary"]] = scores_left[0]
         del scores_left[0]
         abilities_left.remove(self.char_class["Primary"])
@@ -271,6 +269,8 @@ class NPC(object):
     def unarmored_movement(self):
         if self.level > 1:
             movement_bonus = (math.ceil((self.level-1)/4) + 1) * 5
+        else:
+            movement_bonus = 0
         self.race["Speed"] += movement_bonus
 
 
