@@ -92,13 +92,13 @@ def spells_known(level, char_class, casting_mod):
         spell_list.append(new_spell)
         spells_available.remove(new_spell)
         remaining_known -= 1
-    if char_class == "Sorceror":
+    if char_class == "Warlock":
         if level > 11:
-            spell_list.append(random.choice(SPELL_LISTS["Sorceror"]["6"]))
+            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["6"]))
         if level > 13:
-            spell_list.append(random.choice(SPELL_LISTS["Sorceror"]["7"]))
+            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["7"]))
         if level > 15:
-            spell_list.append(random.choice(SPELL_LISTS["Sorceror"]["8"]))
+            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["8"]))
         if level > 17:
-            spell_list.append(random.choice(SPELL_LISTS["Sorceror"]["9"]))
+            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["9"]))
     return spell_list
