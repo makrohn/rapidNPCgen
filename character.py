@@ -36,6 +36,7 @@ class NPC(object):
         self.ability_scores = self.assign_ability_scores(level)
         self.calculate_proficiencies()
         self.skill_proficiencies = self.find_skills()
+        self.expertise_skills = self.calc_expertise()
         self.skills = self.calc_skills()
         self.melee = weapons.choose_melee(self.weapon_proficiencies)
         self.ranged = weapons.choose_ranged(self.weapon_proficiencies)
@@ -186,7 +187,13 @@ class NPC(object):
         for stat in stat_map:
             for skill in stat_map[stat]:
                 if skill in self.skill_proficiencies:
-                    skills[skill] = self.ability_bonuses[stat] + proficiency_bonus
+                    skills[skill] = (
+                        self.ability_bonuses[stat] + proficiency_bonus
+                        )
+                elif skill in self.expertise_skills:
+                    skills[skill] = (
+                        self.ability_bonuses[stat] + (proficiency_bonus * 2)
+                        )
                 else:
                     skills[skill] = self.ability_bonuses[stat] + joat_bonus
 
@@ -196,6 +203,34 @@ class NPC(object):
         self.saves = saves
 
         return skills
+
+
+    def calc_expertise(self):
+        """Calculate Bard or Rogue proficiencies"""
+        expertise_skills = []
+        if self.char_class["Name"] == "Rogue":
+            if self.level < 6:
+                counter = 2
+            elif self.level >= 6:
+                counter = 4
+        elif self.char_class["Name"] == "Bard":
+            if self.level < 3:
+                counter = 0
+            elif 3 <= self.level < 10:
+                counter = 2
+            elif len(self.skill_proficiencies) == 3:
+                counter = 3
+            elif self.level >= 10:
+                counter = 4
+        else:
+            counter = 0
+        while counter > 0:
+            new_expert = random.choice(self.skill_proficiencies)
+            expertise_skills.append(new_expert)
+            self.skill_proficiencies.remove(new_expert)
+            counter -= 1
+        return expertise_skills
+
 
     def calc_ac(self):
         """Figure out a character's AC"""
@@ -248,6 +283,7 @@ def print_character(npc):
     print("HP: " + str(npc.hitpoints))
     print("AC: " + str(npc.armor_class))
     print("Initiative: " + str(npc.calc_initiative()))
+    print("Proficiency Bonus: " + str(npc.get_proficiency_bonus()))
     for ability in ["Strength", "Dexterity", "Constitution",
                     "Intelligence", "Wisdom", "Charisma"]:
         print(
@@ -263,6 +299,7 @@ def print_character(npc):
     print(npc.armor_proficiencies)
     print(npc.tool_proficiencies)
     print(npc.skill_proficiencies)
+    print(npc.expertise_skills)
     print(npc.race["Languages"])
     for skill in ALL_SKILLS:
         print(skill + ": " + str(npc.skills[skill]))

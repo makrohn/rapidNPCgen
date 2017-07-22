@@ -3,7 +3,10 @@
 import random
 import json
 
-CLASS_LIST = ["Barbarian", "Bard", "Cleric", "Druid"]
+CLASS_LIST = [
+    "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin",
+    "Ranger", "Rogue", "Sorceror", "Warlock", "Wizard",
+    ]
 
 
 def get_instruments():
@@ -75,14 +78,14 @@ def choose_fighting_style(styles_list):
         },
     ]
     valid = False
-    while valid == False:
+    while not valid:
         style = random.choice(styles)
         if style["Name"] in styles_list:
             valid = True
     return style
 
 
-def monk_tools():
+def get_monk_tools():
     """Figure out the Monk's tool"""
     instruments_list = [
         "Bagpipes", "Drum", "Dulcimer", "Flute", "Lute", "Lyre", "Horn",
@@ -107,7 +110,7 @@ def load_class_file(classname):
             choose_fighting_style(class_definition["Styles List"])
             )
     if classname == "Monk":
-        class_definition["Tool Proficiencies"] = monk_tools()
+        class_definition["Tool Proficiencies"] = get_monk_tools()
     if classname == "Paladin":
         class_definition["Powers"].append(
             choose_fighting_style(class_definition["Styles List"])
