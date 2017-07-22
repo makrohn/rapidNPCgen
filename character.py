@@ -2,6 +2,7 @@
 
 import math
 import random
+import json
 
 import classes
 import races
@@ -28,9 +29,11 @@ class NPC(object):
         self.char_class = classes.load_class_file(classname)
         self.race = races.load_race_file(race, subrace)
         self.sheet = {}
+        self.sheet["Class"] = classname
         self.sheet["Subrace"] = subrace
         self.sheet["Name"] = self.name
-        self.sheet["Race"] = self.race
+        self.sheet["Race"] = race
+        self.sheet["Level"] = level
         self.sheet["Ability Scores"] = self.assign_ability_scores(level)
         self.calc_proficiencies()
         self.sheet["Skill Proficiencies"] = self.find_skills()
@@ -47,6 +50,7 @@ class NPC(object):
             self.level, self.sheet["Ability Bonuses"]['Constitution']
             )
         if "Caster" in self.char_class:
+            self.sheet["Caster"] = True
             self.sheet["Spells"] = spells.spells_known(
                 self.level, classname,
                 self.sheet["Ability Bonuses"][self.char_class["Casting Stat"]]
@@ -60,6 +64,15 @@ class NPC(object):
             self.sheet["Armor"] = ["None"]
             self.unarmored_movement()
         self.sheet["AC"] = self.calc_ac()
+        self.sheet["Initiative"] = self.calc_initiative()
+        self.sheet["Proficiency Bonus"] = self.get_proficiency_bonus()
+        self.sheet["Spell Slots"] = spells.spell_slots(
+            self.sheet["Level"], self.sheet["Class"]
+            )
+        self.sheet["Size"] = self.race["Size"]
+        self.sheet["Speed"] = self.race["Speed"]
+        self.sheet["Darkvision"] = self.race["Darkvision"]
+        self.sheet["Languages"] = self.race["Languages"]
 
     def get_powers(self):
         """Calculate powers for the NPC"""
@@ -284,44 +297,51 @@ class NPC(object):
             movement_bonus = 0
         self.race["Speed"] += movement_bonus
 
+    def export_to_json(self):
+        """Export the character to a json file"""
+        npc_json = json.dumps(self.sheet)
+        npc_file = open("npc_file.json", "w")
+        npc_file.write(npc_json)
 
-def print_character(npc):
-    """Print the npc"""
-    print(npc.sheet["Name"])
-    print(npc.sheet["Race"])
-    print(npc.char_class["Name"])
-    print("Level: " + str(npc.level))
-    print("HP: " + str(npc.sheet["Hit Points"]))
-    print("AC: " + str(npc.sheet["AC"]))
-    print("Initiative: " + str(npc.calc_initiative()))
-    print("Proficiency Bonus: " + str(npc.get_proficiency_bonus()))
-    for ability in ["Strength", "Dexterity", "Constitution",
-                    "Intelligence", "Wisdom", "Charisma"]:
-        print(
-            ability + ": " + str(npc.sheet["Ability Scores"][ability]) +
-            " (" + str(npc.sheet["Ability Bonuses"][ability]) + ")"
-            )
-    print("Saves: " + str(npc.sheet["Saves"]))
-    print("Size: " + npc.race["Size"])
-    print("Speed: " + str(npc.race["Speed"]))
-    print("Darkvision: " + str(npc.race["Darkvision"]))
-    print("Proficiencies")
-    print(npc.sheet["Weapon Proficiencies"])
-    print(npc.sheet["Armor Proficiencies"])
-    print(npc.sheet["Tool Proficiencies"])
-    print(npc.sheet["Skill Proficiencies"])
-    print(npc.sheet["Expertise Skills"])
-    print(npc.race["Languages"])
-    for skill in ALL_SKILLS:
-        print(skill + ": " + str(npc.sheet["Skill Bonuses"][skill]))
-    print(npc.sheet["Melee Weapon"])
-    print(npc.sheet["Ranged Weapon"])
-    print(npc.sheet["Armor"])
-    for power in npc.sheet["Powers"]:
-        print(power["Name"] + ": " + power["Text"])
-    if "Caster" in npc.char_class:
-        print(npc.sheet["Spells"])
-        print(spells.spell_slots(npc.level, npc.char_class["Name"]))
+
+    def print_character(self):
+        """Print the npc"""
+        npc_sheet = self.sheet
+        print(npc_sheet["Name"])
+        print(npc_sheet["Race"])
+        print(npc_sheet["Class"])
+        print("Level: " + str(npc_sheet["Level"]))
+        print("HP: " + str(npc_sheet["Hit Points"]))
+        print("AC: " + str(npc_sheet["AC"]))
+        print("Initiative: " + str(npc_sheet["Initiative"]))
+        print("Proficiency Bonus: " + str(npc_sheet["Proficiency Bonus"]))
+        for ability in ["Strength", "Dexterity", "Constitution",
+                        "Intelligence", "Wisdom", "Charisma"]:
+            print(
+                ability + ": " + str(npc_sheet["Ability Scores"][ability]) +
+                " (" + str(npc_sheet["Ability Bonuses"][ability]) + ")"
+                )
+        print("Saves: " + str(npc_sheet["Saves"]))
+        print("Size: " + npc_sheet["Size"])
+        print("Speed: " + str(npc_sheet["Speed"]))
+        print("Darkvision: " + str(npc_sheet["Darkvision"]))
+        print("Proficiencies")
+        print(npc_sheet["Weapon Proficiencies"])
+        print(npc_sheet["Armor Proficiencies"])
+        print(npc_sheet["Tool Proficiencies"])
+        print(npc_sheet["Skill Proficiencies"])
+        print(npc_sheet["Expertise Skills"])
+        print(npc_sheet["Languages"])
+        for skill in ALL_SKILLS:
+            print(skill + ": " + str(npc_sheet["Skill Bonuses"][skill]))
+        print(npc_sheet["Melee Weapon"])
+        print(npc_sheet["Ranged Weapon"])
+        print(npc_sheet["Armor"])
+        for power in npc_sheet["Powers"]:
+            print(power["Name"] + ": " + power["Text"])
+        if "Caster" in npc_sheet:
+            print(npc_sheet["Spells"])
+            print(npc_sheet["Spell Slots"])
 
 
 def class_picker():
@@ -407,7 +427,8 @@ def create_character():
         npc = NPC(name, class_choice, race, level, subrace)
     else:
         npc = NPC(name, class_choice, race, level)
-    print_character(npc)
+    return npc
 
 if __name__ == "__main__":
-    create_character()
+    NEW_NPC = create_character()
+    NEW_NPC.print_character()
