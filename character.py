@@ -187,7 +187,7 @@ class NPC(object):
             for skill in stat_map[stat]:
                 if skill in self.sheet["Skill Proficiencies"]:
                     skills[skill] = (
-                        self.sheet["Ability Bonuses"][stat] + 
+                        self.sheet["Ability Bonuses"][stat] +
                         proficiency_bonus
                         )
                 elif skill in self.sheet["Expertise Skills"]:
@@ -270,6 +270,7 @@ class NPC(object):
         return initiative
 
     def unarmored_movement(self):
+        """Add a Monk's unarmored movement bonus to their base racial speed"""
         if self.level > 1:
             movement_bonus = (math.ceil((self.level-1)/4) + 1) * 5
         else:
