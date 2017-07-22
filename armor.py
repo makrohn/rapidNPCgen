@@ -40,6 +40,8 @@ def choose_armor(proficiencies, level, strength):
         {"Name": "Plate", "AC": 18, "Dex_max": 0, "Strength": 15,
          "Disadvantage": True},
         ]
+    no_armor = {"Name": "None", "AC": 10, "Dex_max": 10, "Strength": 0,
+                "Disadvantage": False}
     if "Heavy" in proficiencies:
         available_armor = []
         for armor in heavy_armor:
@@ -49,6 +51,8 @@ def choose_armor(proficiencies, level, strength):
         available_armor = medium_armor
     elif "Light" in proficiencies:
         available_armor = light_armor
+    else:
+        return [no_armor]
     armor_potency = math.floor((level-1)/3)
     if len(available_armor) > armor_potency:
         armor_choice = available_armor[armor_potency]

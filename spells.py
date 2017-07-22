@@ -38,6 +38,13 @@ def calc_spells_known(classname, level, casting_mod=0):
             ]
         spells_known_total = spells_per_level[level-1]
         return spells_known_total
+    if classname == "Sorceror":
+        spells_per_level = [
+            2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+            12, 12, 13, 13, 14, 14, 15, 15, 15, 15
+            ]
+        spells_known_total = spells_per_level[level-1]
+        return spells_known_total
     elif classname == "Cleric" or classname == "Druid":
         spells_prepared = level + casting_mod
         return spells_prepared

@@ -5,7 +5,7 @@ import json
 
 CLASS_LIST = [
     "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin",
-    "Ranger", "Rogue", # "Sorceror", "Warlock", "Wizard",
+    "Ranger", "Rogue", "Sorceror", #"Warlock", "Wizard",
     ]
 
 
