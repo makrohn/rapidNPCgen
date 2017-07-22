@@ -12,6 +12,7 @@ class test_generation(unittest.TestCase):
                         )
                     character.print_character(npc)
 
+
 class test_spellcaster(unittest.TestCase):
     def test_spellcaster(self):
         npc = character.NPC("Arik", "Bard", "Dwarf", 4, "Hill")
