@@ -321,6 +321,7 @@ def print_character(npc):
         print(power["Name"] + ": " + power["Text"])
     if "Caster" in npc.char_class:
         print(npc.sheet["Spells"])
+        print(spells.spell_slots(npc.level, npc.char_class["Name"]))
 
 
 def create_character():

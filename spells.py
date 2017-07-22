@@ -102,3 +102,29 @@ def spells_known(level, char_class, casting_mod):
         if level > 17:
             spell_list.append(random.choice(SPELL_LISTS["Warlock"]["9"]))
     return spell_list
+
+def spell_slots(level, char_class):
+    """Show spell slots"""
+    if char_class in ["Paladin", "Ranger"]:
+        spell_level = math.ceil(level/2)
+        if level == 1:
+            spell_level = 0
+    else:
+        spell_level = level
+    if char_class == "Warlock":
+        if level < 10:
+            slot_level = math.ceil(level/2)
+        elif level >= 10:
+            slot_level = 5
+        if level == 1:
+            slots = 1
+        elif level < 11:
+            slots = 2
+        elif level < 17:
+            slots = 3
+        else:
+            slots = 4
+        spell_string = str(slots) + " slots at level " + str(slot_level)
+        return spell_string
+    else:
+        return SPELL_SLOTS_MATRIX[str(spell_level)]

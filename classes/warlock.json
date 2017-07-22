@@ -1,0 +1,21 @@
+{
+    "Name": "Warlock",
+    "Primary": "Charisma",
+    "Secondary": "Constitution",
+    "Armor Proficiencies": ["Light"],
+    "Weapon Proficiencies": ["Simple"],
+    "Tool Proficiencies": [],
+    "Saves": ["Charisma", "Wisdom"],
+    "Hit Dice": 8,
+    "Skill List": ["Arcana", "Deception", "History", "Intimidation", "Inevstigation", "Nature", "Religion"],
+    "Skill Picks": 2,
+    "Caster": true,
+    "Casting Stat": "Charisma",
+    "Powers": [
+        {
+            "Name": "Eldritch Invocations",
+            "Text": "You gain two eldritch invocations of your choice. Your invocation options are detailed at the end of the class description. When you gain certain warlock levels, you gain additional invocations of your choice, as shown in the Invocations Known column of the Warlock table. Additionally, when you gain a level in this class, you can choose one of the invocations you know and replace it with another invocation that you could learn at that level.",
+            "Level": 2
+        }
+    ]
+}
