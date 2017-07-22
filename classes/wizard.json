@@ -1,0 +1,21 @@
+{
+    "Name": "Wizard",
+    "Primary": "Intelligence",
+    "Secondary": "Dexterity",
+    "Armor Proficiencies": ["None"],
+    "Weapon Proficiencies": ["Dagger", "Dart", "Sling", "Quarterstaff", "Crossbow, light"],
+    "Tool Proficiencies": [],
+    "Saves": ["Intelligence", "Wisdom"],
+    "Hit Dice": 6,
+    "Skill List": ["Arcana", "History", "Insight", "Inevstigation", "Medicine", "Religion"],
+    "Skill Picks": 2,
+    "Caster": true,
+    "Casting Stat": "Intelligence",
+    "Powers": [
+        {
+            "Name": "Arcane Recovery",
+            "Text": "You have learned to regain some of your magical energy by studying your spellbook. Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher.",
+            "Level": 2
+        }
+    ]
+}

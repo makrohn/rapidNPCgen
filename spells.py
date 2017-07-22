@@ -52,7 +52,7 @@ def calc_spells_known(classname, level, casting_mod=0):
             ]
         spells_known_total = spells_per_level[level-1]
         return spells_known_total
-    elif classname == "Cleric" or classname == "Druid":
+    elif classname == "Cleric" or classname == "Druid" or classname == "Wizard":
         spells_prepared = level + casting_mod
         return spells_prepared
     elif classname == "Paladin" or classname == "Ranger":
