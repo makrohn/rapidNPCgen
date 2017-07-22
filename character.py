@@ -27,8 +27,8 @@ class NPC(object):
         self.level = level
         self.char_class = classes.load_class_file(classname)
         self.race = races.load_race_file(race, subrace)
-        self.subrace = subrace
         self.sheet = {}
+        self.sheet["Subrace"] = subrace
         self.sheet["Name"] = self.name
         self.sheet["Race"] = self.race
         self.sheet["Ability Scores"] = self.assign_ability_scores(level)
@@ -87,7 +87,7 @@ class NPC(object):
         """Figure out character's HP"""
         hitpoints = self.char_class["Hit Dice"]
         hitpoints += con_bonus * level
-        if self.subrace == "Hill":
+        if self.sheet["Subrace"] == "Hill":
             hitpoints += level
         level = level-1
         hitpoints += level * 7
@@ -324,12 +324,11 @@ def print_character(npc):
         print(spells.spell_slots(npc.level, npc.char_class["Name"]))
 
 
-def create_character():
-    """Interactively request all the necessary fields to create an NPC"""
-    name = input("Name? ")
-    good_class = False
+def class_picker():
+    """Interactively prompt for a class choice"""
     class_choices = list(range(1, len(classes.CLASS_LIST)+1))
     class_choices = [str(x) for x in class_choices]
+    good_class = False
     while good_class is False:
         print("Choose a class: ")
         for item in classes.CLASS_LIST:
@@ -340,6 +339,11 @@ def create_character():
             good_class = True
         else:
             print("Not a valid class choice")
+    return class_choice
+
+
+def level_query():
+    """Interactively prompt for NPC level"""
     good_level = False
     while good_level is False:
         level = int(input("Level? "))
@@ -348,6 +352,11 @@ def create_character():
             good_level = True
         else:
             print("Please choose a level from 1 to 20")
+    return level_choice
+
+
+def race_picker():
+    """Interactively prompt for a race choice"""
     good_race = False
     race_choices = list(range(1, len(races.RACE_LIST)+1))
     race_choices = [str(x) for x in race_choices]
@@ -361,31 +370,43 @@ def create_character():
             good_race = True
         else:
             print("Not a valid race choice")
-    race = races.load_race_file(race_choice)
-    if "Subraces" in race:
-        good_subrace = False
-        subrace_choices = list(range(0, len(race["Subraces"])))
-        while good_subrace is False:
-            print("Choose a subrace: ")
-            for item in race["Subraces"]:
-                print(
-                    str(race["Subraces"].index(item)+1) +
-                    ": " + item
-                    )
-            subrace_choice = int(
-                input("Enter the number for your choice: ")
-                ) - 1
-            if subrace_choice in subrace_choices:
-                subrace_choice = race["Subraces"][subrace_choice]
-                npc = NPC(
-                    name, class_choice, race_choice,
-                    level_choice, subrace_choice
-                    )
-                good_subrace = True
-            else:
-                print("Not a valid subrace choice")
+    return race_choice
+
+
+def subrace_picker(race):
+    """Interactively prompt for a subrace choice"""
+    good_subrace = False
+    subrace_choices = list(range(0, len(race["Subraces"])))
+    while good_subrace is False:
+        print("Choose a subrace: ")
+        for item in race["Subraces"]:
+            print(
+                str(race["Subraces"].index(item)+1) +
+                ": " + item
+                )
+        subrace_choice = int(
+            input("Enter the number for your choice: ")
+            ) - 1
+        if subrace_choice in subrace_choices:
+            subrace_choice = race["Subraces"][subrace_choice]
+            good_subrace = True
+        else:
+            print("Not a valid subrace choice")
+    return subrace_choice
+
+
+def create_character():
+    """Interactively request all the necessary fields to create an NPC"""
+    name = input("Name? ")
+    class_choice = class_picker()
+    level = level_query()
+    race = race_picker()
+    subrace_check = races.load_race_file(race)
+    if "Subraces" in subrace_check:
+        subrace = subrace_picker(subrace_check)
+        npc = NPC(name, class_choice, race, level, subrace)
     else:
-        npc = NPC(name, class_choice, race_choice, level_choice)
+        npc = NPC(name, class_choice, race, level)
     print_character(npc)
 
 if __name__ == "__main__":
