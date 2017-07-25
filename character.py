@@ -3,12 +3,13 @@
 import math
 import random
 import json
+import collections
 
-import classes
-import races
-import weapons
-import spells
-import armor
+from rpcg_web import classes
+from rpcg_web import races
+from rpcg_web import weapons
+from rpcg_web import spells
+from rpcg_web import armor
 
 STR_SKILLS = ["Athletics"]
 DEX_SKILLS = ["Acrobatics", "Sleight of Hand", "Stealth"]
@@ -34,39 +35,39 @@ class NPC(object):
         self.sheet["Name"] = self.name
         self.sheet["Race"] = race
         self.sheet["Level"] = level
-        self.sheet["Ability Scores"] = self.assign_ability_scores(level)
+        self.sheet["Ability_Scores"] = self.assign_ability_scores(level)
         self.calc_proficiencies()
-        self.sheet["Skill Proficiencies"] = self.find_skills()
-        self.sheet["Expertise Skills"] = self.calc_expertise()
-        self.sheet["Skill Bonuses"] = self.calc_skills()
-        self.sheet["Melee Weapon"] = \
-            weapons.choose_melee(self.sheet["Weapon Proficiencies"])
-        self.sheet["Ranged Weapon"] = \
-            weapons.choose_ranged(self.sheet["Weapon Proficiencies"])
+        self.sheet["Skill_Proficiencies"] = self.find_skills()
+        self.sheet["Expertise_Skills"] = self.calc_expertise()
+        self.sheet["Skill_Bonuses"] = self.calc_skills()
+        self.sheet["Melee_Weapon"] = \
+            weapons.choose_melee(self.sheet["Weapon_Proficiencies"])
+        self.sheet["Ranged_Weapon"] = \
+            weapons.choose_ranged(self.sheet["Weapon_Proficiencies"])
         self.sheet["Powers"] = (
             self.race["Powers"] + self.get_powers()
             )
-        self.sheet["Hit Points"] = self.get_hp(
-            self.level, self.sheet["Ability Bonuses"]['Constitution']
+        self.sheet["Hit_Points"] = self.get_hp(
+            self.level, self.sheet["Ability_Bonuses"]['Constitution']
             )
         if "Caster" in self.char_class:
             self.sheet["Caster"] = True
             self.sheet["Spells"] = spells.spells_known(
                 self.level, classname,
-                self.sheet["Ability Bonuses"][self.char_class["Casting Stat"]]
+                self.sheet["Ability_Bonuses"][self.char_class["Casting Stat"]]
                 )
         if self.char_class["Name"] != "Monk":
             self.sheet["Armor"] = armor.choose_armor(
-                self.sheet["Armor Proficiencies"], self.level,
-                self.sheet["Ability Scores"]['Strength']
+                self.sheet["Armor_Proficiencies"], self.level,
+                self.sheet["Ability_Scores"]['Strength']
                 )
         else:
             self.sheet["Armor"] = ["None"]
             self.unarmored_movement()
         self.sheet["AC"] = self.calc_ac()
         self.sheet["Initiative"] = self.calc_initiative()
-        self.sheet["Proficiency Bonus"] = self.get_proficiency_bonus()
-        self.sheet["Spell Slots"] = spells.spell_slots(
+        self.sheet["Proficiency_Bonus"] = self.get_proficiency_bonus()
+        self.sheet["Spell_Slots"] = spells.spell_slots(
             self.sheet["Level"], self.sheet["Class"]
             )
         self.sheet["Size"] = self.race["Size"]
@@ -108,7 +109,7 @@ class NPC(object):
 
     def assign_ability_scores(self, level):
         """Assign ability scores according to standard matrix"""
-        ability_scores = {}
+        ability_scores = collections.OrderedDict()
         scores_left = [15, 14, 13, 12, 10, 8]
         abilities_left = [
             "Strength", "Dexterity", "Constitution",
@@ -144,26 +145,33 @@ class NPC(object):
                 if ability_scores[stat_up] < 20:
                     ability_scores[stat_up] += 1
                     ability_ups -= 1
-        self.sheet["Ability Bonuses"] = {}
+        reordered_dict = collections.OrderedDict()
+        for ability in [
+            "Strength", "Dexterity", "Constitution",
+            "Intelligence", "Wisdom", "Charisma"
+            ]:
+            reordered_dict[ability] = ability_scores[ability]
+        ability_scores = reordered_dict
+        self.sheet["Ability_Bonuses"] = collections.OrderedDict()
         for score in ability_scores:
-            self.sheet["Ability Bonuses"][score] = math.floor(
+            self.sheet["Ability_Bonuses"][score] = math.floor(
                 (ability_scores[score] - 10)/2
                 )
         return ability_scores
 
     def calc_proficiencies(self):
         """Combine racial and class proficiencies"""
-        self.sheet["Weapon Proficiencies"] = (
+        self.sheet["Weapon_Proficiencies"] = (
             self.race["Weapon Proficiencies"] +
             self.char_class["Weapon Proficiencies"]
             )
 
-        self.sheet["Armor Proficiencies"] = (
+        self.sheet["Armor_Proficiencies"] = (
             self.race["Armor Proficiencies"] +
             self.char_class["Armor Proficiencies"]
             )
 
-        self.sheet["Tool Proficiencies"] = (
+        self.sheet["Tool_Proficiencies"] = (
             self.race["Tool Proficiencies"] +
             self.char_class["Tool Proficiencies"]
             )
@@ -172,6 +180,7 @@ class NPC(object):
         """Get Race skills, then find remaining Class skills"""
         if "Skills" in self.race:
             skills = self.race["Skills"]
+            print(self.race["Skills"])
         else:
             skills = []
         for skill in self.char_class["Skill List"]:
@@ -187,43 +196,55 @@ class NPC(object):
 
     def calc_skills(self):
         """Assign values to skill bonuses"""
-        skills = {}
+        skills = collections.OrderedDict()
         proficiency_bonus = self.get_proficiency_bonus()
 
         joat_bonus = 0
         if self.char_class["Name"] == "Bard" and self.level >= 2:
             joat_bonus = math.floor(proficiency_bonus/2)
 
-        stat_map = {
-            "Strength": STR_SKILLS, "Dexterity": DEX_SKILLS,
-            "Intelligence": INT_SKILLS, "Charisma": CHA_SKILLS,
-            "Wisdom": WIS_SKILLS
-            }
 
-        for stat in stat_map:
-            for skill in stat_map[stat]:
-                if skill in self.sheet["Skill Proficiencies"]:
-                    skills[skill] = (
-                        self.sheet["Ability Bonuses"][stat] +
-                        proficiency_bonus
-                        )
-                elif skill in self.sheet["Expertise Skills"]:
-                    skills[skill] = (
-                        self.sheet["Ability Bonuses"][stat] +
-                        (proficiency_bonus * 2)
-                        )
-                else:
-                    skills[skill] = (
-                        self.sheet["Ability Bonuses"][stat] + joat_bonus
-                        )
+        stat_map = {}
+        for skill in STR_SKILLS:
+            stat_map[skill] = "Strength"
+        for skill in DEX_SKILLS:
+            stat_map[skill] = "Dexterity"
+        for skill in INT_SKILLS:
+            stat_map[skill] = "Intelligence"
+        for skill in WIS_SKILLS:
+            stat_map[skill] = "Wisdom"
+        for skill in CHA_SKILLS:
+            stat_map[skill] = "Charisma"
+        # stat_map = {
+        #     "Strength": STR_SKILLS, "Dexterity": DEX_SKILLS,
+        #     "Intelligence": INT_SKILLS, "Charisma": CHA_SKILLS,
+        #     "Wisdom": WIS_SKILLS
+        #     }
+
+        for skill in sorted(ALL_SKILLS):
+            if skill in self.sheet["Skill_Proficiencies"]:
+                skills[skill] = (
+                    self.sheet["Ability_Bonuses"][stat_map[skill]] +
+                    proficiency_bonus
+                    )
+            elif skill in self.sheet["Expertise_Skills"]:
+                skills[skill] = (
+                    self.sheet["Ability_Bonuses"][stat_map[skill]] +
+                    (proficiency_bonus * 2)
+                    )
+            else:
+                skills[skill] = (
+                    self.sheet["Ability_Bonuses"][stat_map[skill]] + joat_bonus
+                    )
 
         saves = {}
         for save in self.char_class["Saves"]:
             saves[save] = (
-                self.sheet["Ability Bonuses"][save] + proficiency_bonus
+                self.sheet["Ability_Bonuses"][save] + proficiency_bonus
                 )
         self.sheet["Saves"] = saves
 
+        print(skills)
         return skills
 
     def calc_expertise(self):
@@ -239,16 +260,16 @@ class NPC(object):
                 counter = 0
             elif 3 <= self.level < 10:
                 counter = 2
-            elif len(self.sheet["Skill Proficiencies"]) == 3:
+            elif len(self.sheet["Skill_Proficiencies"]) == 3:
                 counter = 3
             elif self.level >= 10:
                 counter = 4
         else:
             counter = 0
         while counter > 0:
-            new_expert = random.choice(self.sheet["Skill Proficiencies"])
+            new_expert = random.choice(self.sheet["Skill_Proficiencies"])
             expertise_skills.append(new_expert)
-            self.sheet["Skill Proficiencies"].remove(new_expert)
+            self.sheet["Skill_Proficiencies"].remove(new_expert)
             counter -= 1
         return expertise_skills
 
@@ -256,23 +277,23 @@ class NPC(object):
         """Figure out a character's AC"""
         if self.char_class["Name"] == "Barbarian":
             armor_class = (
-                10 + self.sheet["Ability Bonuses"]['Dexterity'] +
-                self.sheet["Ability Bonuses"]['Constitution']
+                10 + self.sheet["Ability_Bonuses"]['Dexterity'] +
+                self.sheet["Ability_Bonuses"]['Constitution']
                 )
             del self.sheet["Armor"][0]
         elif self.char_class["Name"] == "Monk":
             armor_class = (
-                10 + self.sheet["Ability Bonuses"]['Dexterity'] +
-                self.sheet["Ability Bonuses"]['Wisdom']
+                10 + self.sheet["Ability_Bonuses"]['Dexterity'] +
+                self.sheet["Ability_Bonuses"]['Wisdom']
                 )
             del self.sheet["Armor"][0]
         else:
             armor_class = self.sheet["Armor"][0]["AC"]
-            if (self.sheet["Ability Bonuses"]['Dexterity'] >
+            if (self.sheet["Ability_Bonuses"]['Dexterity'] >
                     self.sheet["Armor"][0]["Dex_max"]):
                 ac_bonus = self.sheet["Armor"][0]["Dex_max"]
             else:
-                ac_bonus = self.sheet["Ability Bonuses"]['Dexterity']
+                ac_bonus = self.sheet["Ability_Bonuses"]['Dexterity']
             armor_class += ac_bonus
         for item in self.sheet["Armor"]:
             if item["Name"] == "Shield":
@@ -284,7 +305,7 @@ class NPC(object):
 
     def calc_initiative(self):
         """Figure out a character's intiative"""
-        initiative = self.sheet["Ability Bonuses"]['Dexterity']
+        initiative = self.sheet["Ability_Bonuses"]['Dexterity']
         if self.char_class["Name"] == "Bard" and self.level >= 2:
             initiative += math.floor(self.get_proficiency_bonus()/2)
         return initiative
@@ -300,8 +321,7 @@ class NPC(object):
     def export_to_json(self):
         """Export the character to a json file"""
         npc_json = json.dumps(self.sheet)
-        npc_file = open("npc_file.json", "w")
-        npc_file.write(npc_json)
+        return npc_json
 
 
     def print_character(self):
@@ -311,37 +331,37 @@ class NPC(object):
         print(npc_sheet["Race"])
         print(npc_sheet["Class"])
         print("Level: " + str(npc_sheet["Level"]))
-        print("HP: " + str(npc_sheet["Hit Points"]))
+        print("HP: " + str(npc_sheet["Hit_Points"]))
         print("AC: " + str(npc_sheet["AC"]))
         print("Initiative: " + str(npc_sheet["Initiative"]))
-        print("Proficiency Bonus: " + str(npc_sheet["Proficiency Bonus"]))
+        print("Proficiency_Bonus: " + str(npc_sheet["Proficiency_Bonus"]))
         for ability in ["Strength", "Dexterity", "Constitution",
                         "Intelligence", "Wisdom", "Charisma"]:
             print(
-                ability + ": " + str(npc_sheet["Ability Scores"][ability]) +
-                " (" + str(npc_sheet["Ability Bonuses"][ability]) + ")"
+                ability + ": " + str(npc_sheet["Ability_Scores"][ability]) +
+                " (" + str(npc_sheet["Ability_Bonuses"][ability]) + ")"
                 )
         print("Saves: " + str(npc_sheet["Saves"]))
         print("Size: " + npc_sheet["Size"])
         print("Speed: " + str(npc_sheet["Speed"]))
         print("Darkvision: " + str(npc_sheet["Darkvision"]))
         print("Proficiencies")
-        print(npc_sheet["Weapon Proficiencies"])
-        print(npc_sheet["Armor Proficiencies"])
-        print(npc_sheet["Tool Proficiencies"])
-        print(npc_sheet["Skill Proficiencies"])
-        print(npc_sheet["Expertise Skills"])
+        print(npc_sheet["Weapon_Proficiencies"])
+        print(npc_sheet["Armor_Proficiencies"])
+        print(npc_sheet["Tool_Proficiencies"])
+        print(npc_sheet["Skill_Proficiencies"])
+        print(npc_sheet["Expertise_Skills"])
         print(npc_sheet["Languages"])
-        for skill in ALL_SKILLS:
-            print(skill + ": " + str(npc_sheet["Skill Bonuses"][skill]))
-        print(npc_sheet["Melee Weapon"])
-        print(npc_sheet["Ranged Weapon"])
+        for skill, bonus in npc_sheet["Skill_Bonuses"].items():
+            print(skill + ": " + str(bonus))
+        print(npc_sheet["Melee_Weapon"])
+        print(npc_sheet["Ranged_Weapon"])
         print(npc_sheet["Armor"])
         for power in npc_sheet["Powers"]:
             print(power["Name"] + ": " + power["Text"])
         if "Caster" in npc_sheet:
             print(npc_sheet["Spells"])
-            print(npc_sheet["Spell Slots"])
+            print(npc_sheet["Spell_Slots"])
 
 
 def class_picker():

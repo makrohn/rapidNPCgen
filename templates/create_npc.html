@@ -1,0 +1,41 @@
+<h1>{{ Name }}</h1>
+            <h3>{{ Class }}<br >
+                {{ Race }}
+            </h3>
+
+    <hr>
+    <strong>Armor Class: </strong>{{ AC }}<br />
+
+    <strong>Hit Points: </strong>{{ Hit_Points }}<br />
+
+    <strong>Speed: </strong>{{ Speed }}<br />
+
+    <strong>Proficiency Bonus: </strong>{{ Proficiency_Bonus }}<br />
+    <hr>
+
+        {% for ability, score in Ability_Scores.items %}
+            <p><strong>{{ ability }}</strong><br />{{ score }} ({% for thing, bonus in Ability_Bonuses.items %}{% if thing is ability %}{{ bonus }}{% endif %}{% endfor %})</p>
+        {% endfor %}
+    <hr>
+
+    <p>
+        <strong>Skills Proficiencies: </strong> <i>{% for skill in Skill_Proficiencies %}{{ skill }}, {% endfor %}</i>{% if Expertise_Skills|length > 0 %}<strong>Expertise Skills: </strong><i>{% for skill in Expertise_Skills %}{{ skill }}, {% endfor %}</i>{% endif %}<span class='glyphicon glyphicon-question-sign' aria-hidden='true'></span></a></p>
+        {% for skill, bonus in Skill_Bonuses.items %}<strong>{{ skill }}:</strong> {{bonus}}<br /> {% endfor %}
+
+    <hr>
+    
+    <h4>Powers</h4>
+     {% for power in Powers %}              
+     <p><strong>{{ power.Name }}: </strong>{{ power.Text }}</p>
+     {% endfor %}                           
+
+
+    <hr>
+    <h4>Weapons</h4>
+                    <p><strong>{% for key, value in Melee_Weapon.items %}{{ key }}:<br /></strong> <strong> Type: </strong>{{ value.Type }}<strong> Damage: </strong>{{ value.Damage }}<strong> Notes: </strong>{{ value.Notes }}</p>{% endfor %}
+                    <p><strong>{% for key, value in Ranged_Weapon.items %}{{ key }}:<br /></strong> <strong> Type: </strong>{{ value.Type }}<strong> Damage: </strong>{{ value.Damage }}<strong> Notes: </strong>{{ value.Notes }}</p>{% endfor %}
+
+    <p></p>
+{% if Caster %}
+    <hr><p class='action'><strong>Spellcasting.</strong><br />{% for spell in Spells %}{{ spell }}, {% endfor %}<p></p>{% endif %}
+</div>

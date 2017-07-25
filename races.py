@@ -171,7 +171,7 @@ def subrace_gnome(race_def, subrace):
 
 def load_race_file(racename, subrace=""):
     """Load a race's json file and sets other attributes as needed"""
-    filename = "races/" + racename.lower() + '.json'
+    filename = "rpcg_web/races/" + racename.lower() + '.json'
     with open(filename) as race_file:
         race_definition = json.loads(race_file.read())
     if racename == "Dwarf":

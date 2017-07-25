@@ -1,5 +1,5 @@
 import unittest
-import character
+from rpcg_web import character
 
 
 class test_generation(unittest.TestCase):
@@ -10,10 +10,10 @@ class test_generation(unittest.TestCase):
                     npc = character.NPC(
                         "Arik", char_class, race, level, "Forest"
                         )
-                    character.print_character(npc)
+                    npc.print_character()
 
 
 class test_spellcaster(unittest.TestCase):
     def test_spellcaster(self):
         npc = character.NPC("Arik", "Bard", "Dwarf", 4, "Hill")
-        character.print_character(npc)
+        npc.print_character()

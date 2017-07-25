@@ -99,7 +99,7 @@ def get_monk_tools():
 
 def load_class_file(classname):
     """Load a class's json file"""
-    filename = "classes/" + classname.lower() + '.json'
+    filename = "rpcg_web/classes/" + classname.lower() + '.json'
     with open(filename) as class_file:
         class_definition = json.loads(class_file.read())
     if classname == "Bard":
