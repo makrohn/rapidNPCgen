@@ -3,7 +3,7 @@
 import math
 
 SHIELD = [
-    {"Name": "Shield", "AC": 2, "Dex_max": 0, "Strength": 0,
+    {"Name": "Shield", "AC": 2, "Dex_max": 10, "Strength": 0,
      "Disadvantage": False},
 ]
 

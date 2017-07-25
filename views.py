@@ -12,5 +12,6 @@ def create_npc(request):
     new_npc = character.NPC("Arik", "Bard", "Dwarf", 4, "Hill")
     npc_sheet = new_npc.sheet
     template = loader.get_template('create_npc.html')
+    npc_sheet["spell_level_counter"] = 1
     return HttpResponse(template.render(npc_sheet, request))
     # return HttpResponse(npc_json)

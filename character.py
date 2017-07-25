@@ -56,6 +56,7 @@ class NPC(object):
                 self.level, classname,
                 self.sheet["Ability_Bonuses"][self.char_class["Casting Stat"]]
                 )
+            self.sheet["Casting_Stat"] = self.char_class["Casting Stat"]
         if self.char_class["Name"] != "Monk":
             self.sheet["Armor"] = armor.choose_armor(
                 self.sheet["Armor_Proficiencies"], self.level,
@@ -74,6 +75,7 @@ class NPC(object):
         self.sheet["Speed"] = self.race["Speed"]
         self.sheet["Darkvision"] = self.race["Darkvision"]
         self.sheet["Languages"] = self.race["Languages"]
+        self.sheet["Hit_Dice"] = self.char_class["Hit Dice"]
 
     def get_powers(self):
         """Calculate powers for the NPC"""
@@ -180,7 +182,6 @@ class NPC(object):
         """Get Race skills, then find remaining Class skills"""
         if "Skills" in self.race:
             skills = self.race["Skills"]
-            print(self.race["Skills"])
         else:
             skills = []
         for skill in self.char_class["Skill List"]:
@@ -244,7 +245,6 @@ class NPC(object):
                 )
         self.sheet["Saves"] = saves
 
-        print(skills)
         return skills
 
     def calc_expertise(self):

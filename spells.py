@@ -3,6 +3,7 @@
 import random
 import math
 import json
+import collections
 
 SPELL_SLOTS_MATRIX = {
     "0": [],
@@ -114,11 +115,11 @@ def spells_known(level, char_class, casting_mod):
 def spell_slots(level, char_class):
     """Show spell slots"""
     if char_class in ["Paladin", "Ranger"]:
-        spell_level = math.ceil(level/2)
+        caster_level = math.ceil(level/2)
         if level == 1:
-            spell_level = 0
+            caster_level = 0
     else:
-        spell_level = level
+        caster_level = level
     if char_class == "Warlock":
         if level < 10:
             slot_level = math.ceil(level/2)
@@ -132,7 +133,14 @@ def spell_slots(level, char_class):
             slots = 3
         else:
             slots = 4
-        spell_string = str(slots) + " slots at level " + str(slot_level)
+        spell_slots = collections.OrderedDict(slot_level, slots)
         return spell_string
     else:
-        return SPELL_SLOTS_MATRIX[str(spell_level)]
+        spell_slots = collections.OrderedDict()
+        slots_line = SPELL_SLOTS_MATRIX[str(caster_level)]
+        for item in slots_line:
+            spell_tier = slots_line.index(item) + 1
+            slots_in_level = item
+            spell_slots[spell_tier] = item
+        print(spell_slots)
+        return spell_slots
