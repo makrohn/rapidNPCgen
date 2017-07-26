@@ -5,8 +5,16 @@ from rpcg_web import character
 import json
 import collections
 
-def create_npc(request, classname, race, subrace):
-    new_npc = character.NPC("Arik", classname, race, 4, subrace)
+def create_npc(request):
+    classname = request.POST['Class']
+    race = request.POST['Race']
+    level = int(request.POST['Level'])
+    name = request.POST['Name']
+    if 'Subrace' in request.POST:
+        subrace = request.POST['Subrace']
+        new_npc = character.NPC(name, classname, race, level, subrace)
+    else:
+        new_npc = character.NPC(name, classname, race, level)
     npc_sheet = new_npc.sheet
     template = loader.get_template('create_npc.html')
     npc_sheet["spell_level_counter"] = 1

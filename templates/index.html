@@ -1,0 +1,25 @@
+<form action="/create_npc" method="post">
+    {% csrf_token %}
+    <h2>Name:</h2>
+    <input type="text" name="Name"<br />
+    <h2>Level:</h2>
+    <input type="number" name="Level" value="1" min=1 max=20>
+    <h2>Class:</h2>
+    {% for class in Classes %}
+    <input type="radio" name="Class" value={{ class }}> {{ class }}<br />
+    {% endfor %}
+
+    <h2>Race:</h2>
+    {% for race in Races %}
+    <input type="radio" name="Race" value={{ race }}> {{ race }}<br />
+    {% endfor %}
+
+    <h2>Subrace:</h2>
+    {% for race, subraces in Subrace_List.items %}
+    <p><strong>{{ race }} Subraces:</strong><br />
+    {% for subrace in subraces %}
+    <input type="radio" name="Subrace" value={{ subrace }}> {{ subrace }}<br />
+    {% endfor %}</p>
+    {% endfor %}
+    <input type="submit" value="Generate my NPC!">
+</form>
