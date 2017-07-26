@@ -52,8 +52,6 @@ def subrace_dwarf(race_def, subrace):
     elif "Mountain" in subrace:
         race_def["Abilities"]["Strength"] = 2
         race_def["Armor Proficiencies"] = ["Light", "Medium"]
-    else:
-        print("Invalid subrace choice")
     return race_def
 
 
@@ -103,8 +101,6 @@ def subrace_elf(race_def, subrace):
         race_def["Weapon Proficiencies"] = [
             "Rapier", "Shortsword", "Crossbow, hand"
             ]
-    else:
-        print("Invalid subrace choice")
     return race_def
 
 
@@ -125,8 +121,6 @@ def subrace_halfling(race_def, subrace):
             "Text": "You have advantage on saving throws against poison, "
                     "and you have resistance against poison damage"
             })
-    else:
-        print("Invalid subrace choice")
     return race_def
 
 
@@ -164,8 +158,6 @@ def subrace_gnome(race_def, subrace):
                     "10 gp worth of materials to construct a Tiny "
                     "clockwork device (AC 5, 1 hp)."
             })
-    else:
-        print("Invalid subrace choice")
     return race_def
 
 

@@ -142,5 +142,4 @@ def spell_slots(level, char_class):
             spell_tier = slots_line.index(item) + 1
             slots_in_level = item
             spell_slots[spell_tier] = item
-        print(spell_slots)
         return spell_slots
