@@ -1,10 +1,12 @@
+
+<body>
 <h1><span>{{ Name }}</h1>
             <h3>{{ Class }}<br >
-                {{ Race }}
+                {{ Subrace }} {{ Race }}
             </h3>
 
     <hr>
-    <table>
+<div class="Miscellaneous">    <table>
     <tr><td align="right"><strong>Level:</strong></td><td>{{ Level }}</td></tr>
     <tr><td align="right"><strong>AC:</strong></td><td>{{ AC }}</td></tr>
     <tr><td align="right"><strong>HP: </strong></td><td>{{ Hit_Points }}</td></tr>
@@ -20,9 +22,9 @@
     {% if Caster %}
     <tr><td align="right"><strong>Casting Stat: </strong></td><td>{{ Casting_Stat }}</td></tr>
     {% endif %}
-    </table>
+    </table></div>
     <hr>
-    <table>
+<div class="Abilities">    <table>
         {% for ability, score in Ability_Scores.items %}
             <tr>
                 <td colspan=2><strong>{{ ability }}</strong></td>
@@ -32,22 +34,23 @@
                 <td>({% for thing, bonus in Ability_Bonuses.items %}{% if thing is ability %}{{ bonus }}{% endif %}{% endfor %})</td>
             </tr>
         {% endfor %}
-    </table>
+    </table></div>
     <hr>
 
-    <p>
+<div class="Skills">    <p>
         <strong>Skills Proficiencies: </strong> <i>{% for skill in Skill_Proficiencies %}{{ skill }} {% endfor %}</i>{% if Expertise_Skills|length > 0 %}<br /><strong>Expertise Skills: </strong><i>{% for skill in Expertise_Skills %}{{ skill }} {% endfor %}</i>{% endif %}</a></p>
         {% for skill, bonus in Skill_Bonuses.items %}<strong>{{ skill }}:</strong> {{bonus}}<br /> {% endfor %}
-
+</div>
     <hr>
-    
+<div class="Powers">
     <h4>Powers</h4>
      {% for power in Powers %}              
      <p><strong>{{ power.Name }}: </strong>{{ power.Text }}</p>
      {% endfor %}                           
-
+</div>
 
     <hr>
+<div class="Equipment">
     <h4>Weapons</h4>
                     <p>{% for key, value in Melee_Weapon.items %}<strong>{{ key }}<br /></strong> <strong> Type: </strong>{{ value.Type }}<strong> Damage: </strong>{{ value.Damage }}<strong> Notes: </strong>{{ value.Notes }}</p>{% endfor %}
                     <p>{% for key, value in Ranged_Weapon.items %}<strong>{{ key }}<br /></strong> <strong> Type: </strong>{{ value.Type }}<strong> Damage: </strong>{{ value.Damage }}<strong> Notes: </strong>{{ value.Notes }}</p>{% endfor %}
@@ -58,8 +61,11 @@
                     <p><strong>{{ item.Name }}<br /></strong><strong> AC: </strong>{{ item.AC }}{% if item.Strength > 0 %}<strong> Strength Required: </strong>{{ item.Strength }}{% endif %} {% if item.Dex_max < 10 %}<strong>Max Dex bonus:</strong> {{ item.Dex_max }}{% endif %} {% if item.Disadvantage %}Disadvantage on Stealth checks {% endif %}</p>
         {% endfor %}
         <p><strong>Armor Proficiencies: </strong>{% for armor in Armor_Proficiencies %}{{armor}} {% endfor %}</p>
+</div>
 {% if Caster %}
     <hr>
+<div class="Spells">
     <p><strong>Spellcasting</strong><br />{% for spell in Spells %}{{ spell }}, {% endfor %}</p>
     <p><strong>Spell Slots</strong><br />{% for level, slots in Spell_Slots.items %}Level {{ level }} Spell Slots: {{ slots }} <br />{% endfor %}</p>
-{% endif %}
+{% endif %}</div>
+</body>

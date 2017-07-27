@@ -18,5 +18,5 @@
             "Text": "Elves don’t need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day."
         }
     ],
-    "Subraces": ["High Elf", "Wood Elf", "Drow"]
+    "Subraces": ["High", "Wood", "Drow"]
 }

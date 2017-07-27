@@ -1,25 +1,60 @@
-<form action="/create_npc" method="post">
-    {% csrf_token %}
-    <h2>Name:</h2>
-    <input type="text" name="Name"<br />
-    <h2>Level:</h2>
-    <input type="number" name="Level" value="1" min=1 max=20>
-    <h2>Class:</h2>
-    {% for class in Classes %}
-    <input type="radio" name="Class" value={{ class }}> {{ class }}<br />
-    {% endfor %}
+<head>
+    {% load static %}
+    <link type="text/css" rel="stylesheet" href="{% static 'character.css' %}">
+<script type="text/javascript">
 
-    <h2>Race:</h2>
-    {% for race in Races %}
-    <input type="radio" name="Race" value={{ race }}> {{ race }}<br />
-    {% endfor %}
 
-    <h2>Subrace:</h2>
-    {% for race, subraces in Subrace_List.items %}
-    <p><strong>{{ race }} Subraces:</strong><br />
-    {% for subrace in subraces %}
-    <input type="radio" name="Subrace" value={{ subrace }}> {{ subrace }}<br />
-    {% endfor %}</p>
-    {% endfor %}
-    <input type="submit" value="Generate my NPC!">
-</form>
+{% for race, subraces in Subrace_List.items %}
+function {{ race }}subraceCheck() {
+    if (document.getElementById('{{ race }}').checked) {
+        document.getElementById('{{ race }}_subs').style.display = 'none';
+    } else {
+        document.getElementById('{{ race }}_subs').style.display = 'block';
+    }
+
+}
+{% endfor %}
+
+</script>
+</head>
+<body>
+    <form action="/create_npc" method="post">
+        {% csrf_token %}
+        <div class="Name">
+            <h2>Name:</h2><br />
+            <input type="text" name="Name"<br />
+        </div>
+        <div class="Level">
+            <h2>Level:</h2><br />
+            <input type="number" name="Level" value="1" min=1 max=20>
+        </div>
+        <div class="Race">
+            <h2>Race:</h2>
+            {% for race in Races %}
+                <span id="{{ race }}">
+                <input type="radio" name="Race" value={{ race }} onclick="javascript:{{ race }}subraceCheck();"> {{ race }}<br />
+                </span>
+            {% endfor %}
+        </div>
+        <div class="Subrace">
+            <h2>Subrace:</h2>
+            {% for race, subraces in Subrace_List.items %}
+                <div id="{{ race }}_subs" style="display: none">
+                <strong>{{ race }} Subraces:</strong><br />
+                {% for subrace in subraces %}
+                    <input type="radio" name="Subrace" value={{ subrace }}> {{ subrace }}<br />
+                {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="Class">
+            <h2>Class:</h2>
+            {% for class in Classes %}
+                <input type="radio" name="Class" value={{ class }}> {{ class }}<br />
+            {% endfor %}
+        </div>
+        <div class="Button">
+            <input type="submit" value="Generate my NPC!">
+        </div>
+    </form>
+</body>
