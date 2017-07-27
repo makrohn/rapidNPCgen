@@ -1,4 +1,7 @@
-body { background-color: #FFF; }
+body {
+    background-color: #FFF;
+    width:400px;
+}
 
 .Name {
     position: fixed;
@@ -57,4 +60,28 @@ h2 {
     width: 131px;
     padding: 5px;
     top: 365px;
+}
+
+.Combat {
+    position: absolute;
+    top: 0px;
+    left: 200px;
+    padding:10px;
+}
+
+.Main {
+    height: 140;
+}
+
+.Skills {
+    position: relative;
+    top: -330px;
+    left: 200px;
+    padding:10px;
+    height: 0px;
+    margin:0px;
+}
+
+.Abilities {
+    height:320px;
 }
