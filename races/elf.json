@@ -11,11 +11,11 @@
     "Powers": [
         {
             "Name": "Fey Ancestry",
-            "Text": "You have advantage on saving throws against being charmed, and magic can’t put you to sleep."
+            "Text": "You have advantage on saving throws against being charmed, and magic can't put you to sleep."
         },
         {
             "Name": "Trance",
-            "Text": "Elves don’t need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day."
+            "Text": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day."
         }
     ],
     "Subraces": ["High", "Wood", "Drow"]

@@ -153,7 +153,7 @@ def subrace_gnome(race_def, subrace):
             })
         race_def["Powers"].append({
             "Name": "Tinker",
-            "Text": "You have proficiency with artisan’s tools (tinker’s "
+            "Text": "You have proficiency with artisan's tools (tinker's "
                     "tools). Using those tools, you can spend 1 hour and "
                     "10 gp worth of materials to construct a Tiny "
                     "clockwork device (AC 5, 1 hp)."
