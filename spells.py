@@ -133,8 +133,9 @@ def spell_slots(level, char_class):
             slots = 3
         else:
             slots = 4
-        spell_slots = collections.OrderedDict(slot_level, slots)
-        return spell_string
+        spell_slots = collections.OrderedDict()
+        spell_slots[slot_level] = slots
+        return spell_slots
     else:
         spell_slots = collections.OrderedDict()
         slots_line = SPELL_SLOTS_MATRIX[str(caster_level)]
