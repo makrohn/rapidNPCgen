@@ -23,8 +23,8 @@
     </div>
 
     <hr>
- <p>{% for key, value in Melee_Weapon.items %}<strong>{{ key }}<br /></strong> <strong> Type: </strong>{{ value.Type }}<strong> Damage: </strong>{{ value.Damage }}<strong> Notes: </strong>{{ value.Notes }}<br />{% endfor %}</p>
-                    <p>{% for key, value in Ranged_Weapon.items %}<strong>{{ key }}<br /></strong> <strong> Type: </strong>{{ value.Type }}<strong> Damage: </strong>{{ value.Damage }}<strong> Notes: </strong>{{ value.Notes }}<br />{% endfor %}</p>
+ <p>{% for key, value in Melee_Weapon.items %}<strong>{{ key }}<br /></strong> <strong> Type: </strong>{{ value.Type }} <strong>Attack Stat: </strong>{{ Melee_Attack_Stat }} <strong>Attack Bonus: </strong>{{ Melee_Attack_Bonus }} <strong> Damage: </strong>{{ value.Damage }}{{ Melee_Damage_Bonus }}<strong> Notes: </strong>{{ value.Notes }}<br />{% endfor %}</p>
+                    <p>{% for key, value in Ranged_Weapon.items %}<strong>{{ key }}<br /></strong> <strong> Type: </strong>{{ value.Type }}<strong> Attack Stat: </strong>{{ Ranged_Attack_Stat }} <strong>Attack Bonus: </strong>{{ Ranged_Attack_Bonus }}<strong>  Damage: </strong>{{ value.Damage }}{{ Ranged_Damage_Bonus }}<strong> Notes: </strong>{{ value.Notes }}<br />{% endfor %}</p>
                     <hr>
 <div class="Abilities">    <table>
         {% for ability, score in Ability_Scores.items %}

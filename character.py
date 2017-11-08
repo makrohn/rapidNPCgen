@@ -41,14 +41,6 @@ class NPC(object):
         self.sheet["Skill_Proficiencies"] = self.find_skills()
         self.sheet["Expertise_Skills"] = self.calc_expertise()
         self.sheet["Skill_Bonuses"] = self.calc_skills()
-        self.sheet["Melee_Weapon"] = \
-            weapons.choose_melee(self.sheet["Weapon_Proficiencies"],
-                                self.sheet["Ability_Bonuses"]["Strength"],
-                                self.sheet["Ability_Bonuses"]["Dexterity"])
-        self.sheet["Ranged_Weapon"] = \
-            weapons.choose_ranged(self.sheet["Weapon_Proficiencies"],
-                                  self.sheet["Ability_Bonuses"]["Strength"],
-                                  self.sheet["Ability_Bonuses"]["Dexterity"])
         self.sheet["Powers"] = (
             self.race["Powers"] + self.get_powers()
             )
@@ -81,6 +73,38 @@ class NPC(object):
         self.sheet["Darkvision"] = self.race["Darkvision"]
         self.sheet["Languages"] = self.race["Languages"]
         self.sheet["Hit_Dice"] = self.char_class["Hit Dice"]
+        # Handle melee weapon
+        self.sheet["Melee_Weapon"], self.sheet["Melee_Attack_Stat"] = \
+            weapons.choose_melee(
+                self.sheet["Weapon_Proficiencies"],
+                self.sheet["Ability_Bonuses"]["Strength"],
+                self.sheet["Ability_Bonuses"]["Dexterity"]
+                )
+        melee_stat = self.sheet["Melee_Attack_Stat"]
+        if self.sheet["Ability_Bonuses"][self.sheet["Melee_Attack_Stat"]] > 0:
+            self.sheet["Melee_Damage_Bonus"] = "+" + \
+                str(self.sheet["Ability_Bonuses"][melee_stat])
+        if self.sheet["Ability_Bonuses"][self.sheet["Melee_Attack_Stat"]] < 0:
+            self.sheet["Melee_Damage_Bonus"] = \
+                str(self.sheet["Ability_Bonuses"][melee_stat])
+        self.sheet["Melee_Attack_Bonus"] = self.sheet["Proficiency_Bonus"] + \
+            self.sheet["Ability_Bonuses"][self.sheet["Melee_Attack_Stat"]]
+        # Handle ranged Weapon
+        self.sheet["Ranged_Weapon"], self.sheet["Ranged_Attack_Stat"] = \
+            weapons.choose_ranged(
+                self.sheet["Weapon_Proficiencies"],
+                self.sheet["Ability_Bonuses"]["Strength"],
+                self.sheet["Ability_Bonuses"]["Dexterity"]
+                )
+        ranged_stat = self.sheet["Ranged_Attack_Stat"]
+        if self.sheet["Ability_Bonuses"][self.sheet["Ranged_Attack_Stat"]] > 0:
+            self.sheet["Ranged_Damage_Bonus"] = "+" + \
+                str(self.sheet["Ability_Bonuses"][ranged_stat])
+        if self.sheet["Ability_Bonuses"][self.sheet["Ranged_Attack_Stat"]] < 0:
+            self.sheet["Ranged_Damage_Bonus"] = \
+                str(self.sheet["Ability_Bonuses"][ranged_stat])
+        self.sheet["Ranged_Attack_Bonus"] = self.sheet["Proficiency_Bonus"] + \
+            self.sheet["Ability_Bonuses"][self.sheet["Ranged_Attack_Stat"]]
 
     def get_powers(self):
         """Calculate powers for the NPC"""
@@ -154,9 +178,9 @@ class NPC(object):
                     ability_ups -= 1
         reordered_dict = collections.OrderedDict()
         for ability in [
-            "Strength", "Dexterity", "Constitution",
-            "Intelligence", "Wisdom", "Charisma"
-            ]:
+                "Strength", "Dexterity", "Constitution",
+                "Intelligence", "Wisdom", "Charisma"
+        ]:
             reordered_dict[ability] = ability_scores[ability]
         ability_scores = reordered_dict
         self.sheet["Ability_Bonuses"] = collections.OrderedDict()
@@ -208,7 +232,6 @@ class NPC(object):
         joat_bonus = 0
         if self.char_class["Name"] == "Bard" and self.level >= 2:
             joat_bonus = math.floor(proficiency_bonus/2)
-
 
         stat_map = {}
         for skill in STR_SKILLS:

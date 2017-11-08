@@ -1,7 +1,5 @@
 """Choose random weapons that an NPC is proficient in"""
 
-import random
-
 SIMPLE_MELEE = [
     {"Club": {"Damage": "1d4", "Type": "bludgeoning", "Notes": "Light",
               "Average": 2.5}},
@@ -16,11 +14,11 @@ SIMPLE_MELEE = [
     {"Light Hammer": {"Damage": "1d4", "Type": "bludgeoning", "Average": 2.5,
                       "Notes": "Light, thrown (range 20/60)"}},
     {"Mace": {"Damage": "1d6", "Type": "bludgeoning", "Notes": "",
-              "Average": 3.5,}},
+              "Average": 3.5}},
     {"Quarterstaff": {"Damage": "1d6", "Type": "bludgeoning", "Average": 3.5,
                       "Notes": "Versatile (1d8)"}},
     {"Sickle": {"Damage": "1d4", "Type": "slashing", "Notes": "Light",
-                "Average": 2.5,}},
+                "Average": 2.5}},
     {"Spear": {"Damage": "1d6", "Type": "piercing", "Average": 3.5,
                "Notes": "Thrown (range 20/60), versatile (1d8)"}},
 ]
@@ -39,7 +37,7 @@ MARTIAL_MELEE = [
     {"Battleaxe": {"Damage": "1d8", "Type": "slashing", "Average": 4.5,
                    "Notes": "Versatile (1d10)"}},
     {"Flail": {"Damage": "1d8", "Type": "bludgeoning", "Notes": "",
-               "Average": 4.5,}},
+               "Average": 4.5}},
     {"Glaive": {"Damage": "1d10", "Type": "slashing", "Average": 5.5,
                 "Notes": "Heavy, reach, two-handed"}},
     {"Greataxe": {"Damage": "1d12", "Type": "slashing", "Average": 6.5,
@@ -55,7 +53,7 @@ MARTIAL_MELEE = [
     {"Maul": {"Damage": "2d6", "Type": "bludgeoning", "Average": 7,
               "Notes": "Heavy, two-handed"}},
     {"Morningstar": {"Damage": "1d8", "Type": "piercing", "Notes": "",
-                     "Average": 4.5,}},
+                     "Average": 4.5}},
     {"Pike": {"Damage": "1d10", "Type": "piercing", "Average": 5.5,
               "Notes": "Heavy, reach, two-handed"}},
     {"Rapier": {"Damage": "1d8", "Type": "piercing", "Notes": "Finesse",
@@ -67,7 +65,7 @@ MARTIAL_MELEE = [
     {"Trident": {"Damage": "1d6", "Type": "piercing", "Average": 3.5,
                  "Notes": "Thrown (range 20/60), versatile (1d8)"}},
     {"War Pick": {"Damage": "1d8", "Type": "piercing", "Notes": "",
-                  "Average": 4.5,}},
+                  "Average": 4.5}},
     {"Warhammer": {"Damage": "1d8", "Type": "bludgeoning", "Average": 4.5,
                    "Notes": "Versatile (1d10)"}},
     {"Whip": {"Damage": "1d4", "Type": "slashing", "Average": 2.5,
@@ -92,6 +90,34 @@ RANGED_WEAPONS = SIMPLE_RANGED + MARTIAL_RANGED
 MELEE_WEAPONS = SIMPLE_MELEE + MARTIAL_MELEE
 
 
+def best_melee(choices, strength, dexterity):
+    """Pick the best melee weapon"""
+    best_damage = 0
+    for choice in choices:
+        for item in choice:
+            damage = choice[item]["Average"]
+            notes = choice[item]["Notes"].lower()
+            if int(dexterity) > int(strength):
+                if "finesse" in notes:
+                    damage += int(dexterity)
+                    weapon_stat = "Dexterity"
+                else:
+                    damage += int(strength)
+                    weapon_stat = "Strength"
+            else:
+                damage += int(strength)
+                weapon_stat = "Strength"
+            if damage > best_damage:
+                best_damage = damage
+                best_choice = choice
+                attack_stat = weapon_stat
+            elif damage == best_damage:
+                if "versatile" in notes:
+                    best_choice = choice
+                    attack_stat = weapon_stat
+    return best_choice, attack_stat
+
+
 def choose_melee(proficiencies, strength, dexterity):
     """Choose a melee weapon"""
     choices = []
@@ -106,25 +132,32 @@ def choose_melee(proficiencies, strength, dexterity):
                 choices.append(item)
     if choices == []:
         return "No melee weapon"
+    melee_weapon = best_melee(choices, strength, dexterity)
+    return melee_weapon
+
+
+def best_ranged(choices, strength, dexterity):
+    """Pick the best ranged weapon"""
     best_damage = 0
     for choice in choices:
         for item in choice:
             damage = choice[item]["Average"]
             notes = choice[item]["Notes"].lower()
-            if int(dexterity) > int(strength):
-                if "finesse" in notes:
-                    damage += int(dexterity)
-                else:
+            if int(strength) > int(dexterity):
+                if "thrown" in notes:
                     damage += int(strength)
+                    ranged_stat = "Strength"
+                else:
+                    damage += int(dexterity)
+                    ranged_stat = "Dexterity"
             else:
-                damage += int(strength)
+                damage += int(dexterity)
+                ranged_stat = "Dexterity"
             if damage > best_damage:
                 best_damage = damage
                 best_choice = choice
-            elif damage == best_damage:
-                if "versatile" in notes:
-                    best_choice = choice
-    return best_choice
+                attack_stat = ranged_stat
+    return best_choice, attack_stat
 
 
 def choose_ranged(proficiencies, strength, dexterity):
@@ -141,19 +174,5 @@ def choose_ranged(proficiencies, strength, dexterity):
                 choices.append(item)
     if choices == []:
         return "No ranged weapon"
-    best_damage = 0
-    for choice in choices:
-        for item in choice:
-            damage = choice[item]["Average"]
-            notes = choice[item]["Notes"].lower()
-            if int(strength) > int(dexterity):
-                if "thrown" in notes:
-                    damage += int(strength)
-                else:
-                    damage += int(dexterity)
-            else:
-                damage += int(dexterity)
-            if damage > best_damage:
-                best_damage = damage
-                best_choice = choice
-    return best_choice
+    ranged_weapon = best_ranged(choices, strength, dexterity)
+    return ranged_weapon
