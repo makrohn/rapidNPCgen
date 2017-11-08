@@ -108,15 +108,15 @@ def spells_known(level, char_class, casting_mod):
         spell_list.append(new_spell)
         class_list.remove(new_spell)
         remaining_known -= 1
-    # if char_class == "Warlock":
-    #     if level > 11:
-    #         spell_list.append(random.choice(SPELL_LISTS["Warlock"]["6"]))
-    #     if level > 13:
-    #         spell_list.append(random.choice(SPELL_LISTS["Warlock"]["7"]))
-    #     if level > 15:
-    #         spell_list.append(random.choice(SPELL_LISTS["Warlock"]["8"]))
-    #     if level > 17:
-    #         spell_list.append(random.choice(SPELL_LISTS["Warlock"]["9"]))
+    if char_class == "Warlock":
+        if level > 11:
+            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["6"]))
+        if level > 13:
+            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["7"]))
+        if level > 15:
+            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["8"]))
+        if level > 17:
+            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["9"]))
     return spell_list
 
 
@@ -147,8 +147,10 @@ def spell_slots(level, char_class):
     else:
         spell_slots = collections.OrderedDict()
         slots_line = SPELL_SLOTS_MATRIX[str(caster_level)]
+        print(slots_line)
+        slot_level = 1
         for item in slots_line:
-            spell_tier = slots_line.index(item) + 1
-            slots_in_level = item
-            spell_slots[spell_tier] = item
+            spell_slots[slot_level] = item
+            slot_level += 1
+        print(spell_slots)
         return spell_slots
