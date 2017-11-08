@@ -42,9 +42,13 @@ class NPC(object):
         self.sheet["Expertise_Skills"] = self.calc_expertise()
         self.sheet["Skill_Bonuses"] = self.calc_skills()
         self.sheet["Melee_Weapon"] = \
-            weapons.choose_melee(self.sheet["Weapon_Proficiencies"])
+            weapons.choose_melee(self.sheet["Weapon_Proficiencies"],
+                                self.sheet["Ability_Bonuses"]["Strength"],
+                                self.sheet["Ability_Bonuses"]["Dexterity"])
         self.sheet["Ranged_Weapon"] = \
-            weapons.choose_ranged(self.sheet["Weapon_Proficiencies"])
+            weapons.choose_ranged(self.sheet["Weapon_Proficiencies"],
+                                  self.sheet["Ability_Bonuses"]["Strength"],
+                                  self.sheet["Ability_Bonuses"]["Dexterity"])
         self.sheet["Powers"] = (
             self.race["Powers"] + self.get_powers()
             )
