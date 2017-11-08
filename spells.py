@@ -84,23 +84,26 @@ def get_highest_spell_slot(char_class, level):
     return highest_known
 
 
+def get_warlock_spell(level):
+    """For Mystic Arcanum class feature"""
+    warlock_spells = []
+    for spell in SPELL_LIST:
+        if spell["level"] == str(level):
+            warlock_spells.append(spell)
+    return random.choice(warlock_spells)
+
+
 def spells_known(level, char_class, casting_mod):
     """Create a random spell list for a character"""
     if (char_class == "Paladin" or char_class == "Ranger") and level == 1:
         return []
     highest_known = get_highest_spell_slot(char_class, level)
-    spells_available = []
-    counter = highest_known
     class_list = []
     for spell in SPELL_LIST:
         if spell["level"] != "cantrip":
-            if (int(spell["level"]) <= highest_known and char_class.lower() in spell["classes"]):
+            if (int(spell["level"]) <= highest_known and
+                    char_class.lower() in spell["classes"]):
                 class_list.append(spell)
-    for spell in class_list:
-        print(spell["name"])
-    # while counter > 0:
-    #     spells_available += (SPELL_LISTS[char_class][str(counter)])
-    #     counter -= 1
     remaining_known = calc_spells_known(char_class, level, casting_mod)
     spell_list = []
     while remaining_known > 0:
@@ -110,13 +113,13 @@ def spells_known(level, char_class, casting_mod):
         remaining_known -= 1
     if char_class == "Warlock":
         if level > 11:
-            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["6"]))
+            spell_list.append(get_warlock_spell(6))
         if level > 13:
-            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["7"]))
+            spell_list.append(get_warlock_spell(7))
         if level > 15:
-            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["8"]))
+            spell_list.append(get_warlock_spell(8))
         if level > 17:
-            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["9"]))
+            spell_list.append(get_warlock_spell(9))
     return spell_list
 
 
