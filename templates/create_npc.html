@@ -68,7 +68,7 @@
 {% if Caster %}
     <hr>
 <div class="Spells">
-    <p><strong>Spellcasting</strong><br />{% for spell in Spells %}{{ spell }}, {% endfor %}</p>
+    <h3>Spellcasting</h3><p><br />{% for spell in Spells %}<strong>Name: </strong>{{ spell.name }}<br /><em>{{ spell.type }}</em><br /><strong>Casting Time: </strong>{{ spell.casting_time}}<br /><strong>Range: </strong>{{ spell.range }}<br /><strong>Components: </strong>{{ spell.components.raw }}<br /> <strong>Duration: </strong>{{ spell.duration }}<br /> {{ spell.description }}<br />{% if spell.higher_levels %}<strong>At Higher Levels: </strong>{{ spell.higher_levels }}<br />{% endif %} <br /> {% endfor %}</p>
     <p><strong>Spell Slots</strong><br />{% for level, slots in Spell_Slots.items %}Level {{ level }} Spell Slots: {{ slots }} <br />{% endfor %}</p>
 {% endif %}</div>
 

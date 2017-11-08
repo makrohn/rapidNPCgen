@@ -32,37 +32,38 @@ SPELL_SLOTS_MATRIX = {
 
 def calc_spells_known(classname, level, casting_mod=0):
     """Return number of spells known or prepared"""
-    if classname == "Bard":
+    classname = classname.lower()
+    if classname == "bard":
         spells_per_level = [
             4, 5, 6, 7, 8, 9, 10, 11, 12, 14,
             15, 15, 16, 18, 19, 19, 20, 22, 22, 22
             ]
         spells_known_total = spells_per_level[level-1]
         return spells_known_total
-    if classname == "Sorceror":
+    if classname == "sorceror":
         spells_per_level = [
             2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
             12, 12, 13, 13, 14, 14, 15, 15, 15, 15
             ]
         spells_known_total = spells_per_level[level-1]
         return spells_known_total
-    if classname == "Warlock":
+    if classname == "warlock":
         spells_per_level = [
             2, 3, 4, 5, 6, 7, 8, 9, 10, 10,
             11, 11, 12, 12, 13, 13, 14, 14, 15, 15
             ]
         spells_known_total = spells_per_level[level-1]
         return spells_known_total
-    elif (classname == "Cleric" or
-          classname == "Druid" or classname == "Wizard"):
+    elif (classname == "cleric" or
+          classname == "druid" or classname == "wizard"):
         spells_prepared = level + casting_mod
         return spells_prepared
-    elif classname == "Paladin" or classname == "Ranger":
+    elif classname == "paladin" or classname == "ranger":
         spells_prepared = math.floor(level/2) + casting_mod
         return spells_prepared
 
 with open('rpcg_web/spells.json') as spell_file:
-    SPELL_LISTS = json.loads(spell_file.read())
+    SPELL_LIST = json.loads(spell_file.read())
 
 
 def get_highest_spell_slot(char_class, level):
@@ -90,25 +91,32 @@ def spells_known(level, char_class, casting_mod):
     highest_known = get_highest_spell_slot(char_class, level)
     spells_available = []
     counter = highest_known
-    while counter > 0:
-        spells_available += (SPELL_LISTS[char_class][str(counter)])
-        counter -= 1
+    class_list = []
+    for spell in SPELL_LIST:
+        if spell["level"] != "cantrip":
+            if (int(spell["level"]) <= highest_known and char_class.lower() in spell["classes"]):
+                class_list.append(spell)
+    for spell in class_list:
+        print(spell["name"])
+    # while counter > 0:
+    #     spells_available += (SPELL_LISTS[char_class][str(counter)])
+    #     counter -= 1
     remaining_known = calc_spells_known(char_class, level, casting_mod)
     spell_list = []
     while remaining_known > 0:
-        new_spell = random.choice(spells_available)
+        new_spell = random.choice(class_list)
         spell_list.append(new_spell)
-        spells_available.remove(new_spell)
+        class_list.remove(new_spell)
         remaining_known -= 1
-    if char_class == "Warlock":
-        if level > 11:
-            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["6"]))
-        if level > 13:
-            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["7"]))
-        if level > 15:
-            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["8"]))
-        if level > 17:
-            spell_list.append(random.choice(SPELL_LISTS["Warlock"]["9"]))
+    # if char_class == "Warlock":
+    #     if level > 11:
+    #         spell_list.append(random.choice(SPELL_LISTS["Warlock"]["6"]))
+    #     if level > 13:
+    #         spell_list.append(random.choice(SPELL_LISTS["Warlock"]["7"]))
+    #     if level > 15:
+    #         spell_list.append(random.choice(SPELL_LISTS["Warlock"]["8"]))
+    #     if level > 17:
+    #         spell_list.append(random.choice(SPELL_LISTS["Warlock"]["9"]))
     return spell_list
 
 
