@@ -35,6 +35,7 @@ class NPC(object):
         self.sheet["Name"] = self.name
         self.sheet["Race"] = race
         self.sheet["Level"] = level
+        self.sheet["Proficiency_Bonus"] = self.get_proficiency_bonus()
         self.sheet["Ability_Scores"] = self.assign_ability_scores(level)
         self.calc_proficiencies()
         self.sheet["Skill_Proficiencies"] = self.find_skills()
@@ -57,6 +58,7 @@ class NPC(object):
                 self.sheet["Ability_Bonuses"][self.char_class["Casting Stat"]]
                 )
             self.sheet["Casting_Stat"] = self.char_class["Casting Stat"]
+            self.sheet["Save_DC"] = self.calc_save_dc()
         if self.char_class["Name"] != "Monk":
             self.sheet["Armor"] = armor.choose_armor(
                 self.sheet["Armor_Proficiencies"], self.level,
@@ -67,7 +69,6 @@ class NPC(object):
             self.unarmored_movement()
         self.sheet["AC"] = self.calc_ac()
         self.sheet["Initiative"] = self.calc_initiative()
-        self.sheet["Proficiency_Bonus"] = self.get_proficiency_bonus()
         self.sheet["Spell_Slots"] = spells.spell_slots(
             self.sheet["Level"], self.sheet["Class"]
             )
@@ -318,11 +319,17 @@ class NPC(object):
             movement_bonus = 0
         self.race["Speed"] += movement_bonus
 
+    def calc_save_dc(self):
+        """Calculate class Save DC"""
+        casting_stat = \
+            self.sheet["Ability_Bonuses"][self.char_class["Casting Stat"]]
+        save_dc = 8 + self.get_proficiency_bonus() + int(casting_stat)
+        return save_dc
+
     def export_to_json(self):
         """Export the character to a json file"""
         npc_json = json.dumps(self.sheet)
         return npc_json
-
 
     def print_character(self):
         """Print the npc"""
